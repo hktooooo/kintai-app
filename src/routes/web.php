@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminAttendanceController;
 
 Route::get('/register', [AuthController::class, 'show_register']);
 Route::post('/register', [AuthController::class, 'store_user']);
@@ -15,9 +16,10 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminLoginController::class, 'login']);
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
-    // Route::middleware('auth:admin')->group(function () {
-    //     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    // });
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/attendance/list', [AdminAttendanceController::class, 'admin_show_list'])->name('admin.list');
+        Route::get('/staff/list', [AdminAttendanceController::class, 'show_staff_list']);
+    });
 });
 
 Route::middleware(['auth'])->group(function () {
