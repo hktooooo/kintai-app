@@ -16,30 +16,27 @@
             <a class="header__heading" href="/">
                 <img src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
             </a>
+            @if (Auth::check())
             <nav>
                 <ul class="header-nav">
                     <li class="header-nav__item">
-                    @if (Auth::check())
+                        <a class="" href="/attendance">勤怠</a>
+                    </li>
+                    <li class="header-nav__item">
+                        <a class="" href="/attendance/list">勤怠一覧</a>
+                    </li>
+                    <li class="header-nav__item">
+                        <a class="" href="">申請</a>
+                    </li>
+                    <li class="header-nav__item">
                         <form action="/logout" method="post">
                         @csrf
                             <button class="header-nav__link-logout">ログアウト</button>
                         </form>
-                    @else
-                        <a class="header-nav__link-login" href="/login">ログイン</a>
-                    @endif
-                    </li>
-                    <li class="header-nav__item">
-                        <form action="" method="get">
-                        <button type="submit" class="header-nav__link-mypage">
-                            マイページ
-                        </button>
-                        </form>
-                    </li>
-                    <li class="header-nav__item__button">
-                        <a class="" href="">出品</a>
                     </li>
                 </ul>
             </nav>
+            @endif
         </header>
         <div class="content">
             @yield('content')
