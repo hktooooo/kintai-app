@@ -1,0 +1,72 @@
+.search-form {
+    display: none;
+}
+
+.header nav {
+    display: none;
+}
+
+.content__heading {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.btn {
+    background-color: #000;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.login-form__heading {
+    margin-top: 118px;
+    margin-bottom: 53px;
+}
+
+.login-form__inner {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.login-form__group {
+    height: 128px;
+}
+
+.login-form__label {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.login-form__input {
+    margin-top: 4px;
+    width: 100%;
+    height: 59px;
+    border: #5F5F5F solid 1px;
+    border-radius: 4px;
+    padding-left: 12px;
+    color: #000;
+    font-size: 24px;
+}
+
+.login-form__btn {
+    margin-top: 42px;
+    width: 100%;
+    height: 65px;
+    font-size: 24px;
+}
+
+.login-form__link-register {
+    display: block;
+    margin-top: 24px;
+    padding-bottom: 252px;
+    color: #0073CC;
+    font-size: 20px;
+    text-align: center;
+}
+
+.login-form__error-message {
+    margin-top: 2px;
+    font-size: 16px;
+    color: #000;
+}
