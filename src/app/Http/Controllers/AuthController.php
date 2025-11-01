@@ -20,7 +20,7 @@ class AuthController extends Controller
     // 登録画面の表示
     public function show_register()
     {
-        return view('auth.register');  
+        return view('auth.register');
     }
 
     // 登録時の処理
@@ -33,14 +33,32 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // メール認証用メール送信
-        event(new Registered($user));
-
         Auth::login($user);
 
-        // メール認証通知画面にリダイレクト
-        return redirect()->route('verification.notice');
+        return redirect()->route('home');
     }
+
+
+
+
+    // // 登録時の処理
+    // public function store_user(RegisterRequest $request)
+    // {
+    //     // ユーザー作成
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'password' => Hash::make($request->password),
+    //     ]);
+
+    //     // メール認証用メール送信
+    //     event(new Registered($user));
+
+    //     Auth::login($user);
+
+    //     // メール認証通知画面にリダイレクト
+    //     return redirect()->route('verification.notice');
+    // }
 
     // メール認証通知画面
     public function verifyNotice() {
