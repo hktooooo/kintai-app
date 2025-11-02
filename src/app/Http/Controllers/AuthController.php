@@ -93,59 +93,7 @@ class AuthController extends Controller
     }
 
 
-    // プロフィール編集画面表示
-    public function mypage_edit()
-    {
-        $auth_user = Auth::user();
 
-        return view('auth.mypage_edit', compact('auth_user'));
-    }
-
-    // プロフィールの更新
-    public function mypage_update(ProfileRequest $request)
-    {
-        $userId = Auth::id(); // ログインユーザーID
-        $user = User::findOrFail($userId);
-
-        $user->name = $request->name;
-        $user->zipcode = $request->zipcode;
-        $user->address = $request->address;
-        $user->building = $request->building;
-
-        // 新しい画像がアップロードされた場合
-        if ($request->hasFile('img_url')) {
-            $file     = $request->file('img_url');
-            $filename = 'user_id-' . $user->id . '.' . $file->getClientOriginalExtension(); // 例: 5.jpg
-            $path     = $file->storeAs('profile_images', $filename, 'public');
-
-            // DBに保存
-            $user->img_url = $path;
-        }
-
-        $user->save();
-
-        return redirect('/');
-    }
-
-    // プロフィール画面表示
-    public function mypage(Request $request)
-    {
-        $page = $request->query('page', 'sell');
-        $userId = Auth::id();
-        $auth_user = Auth::user()->refresh();
-
-        if ($page === 'sell') {
-            // 出品した商品
-            $products = Product::with('condition')
-                ->where('seller_id', $userId)->get();
-        } else {
-            // 購入した商品
-            $products = Product::with('condition')
-                ->where('buyer_id', $userId)->get();
-        }
-
-        return view('auth.mypage', compact('products', 'page', 'auth_user'));
-    }
 
     // ログイン時の処理
     public function login(LoginRequest $request)
