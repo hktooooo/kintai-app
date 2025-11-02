@@ -7,14 +7,16 @@
 @section('content')
 <div class="register-form">
     <div>
-        @if ($status == 0)
+        @if ($status == "absent")
             勤務外
-        @elseif ($status == 1)
+        @elseif ($status == "working")
             出勤中
-        @elseif ($status == 2)
+        @elseif ($status == "break")
             休憩中
-        @else
+        @elseif ($status == "completed")
             退勤済
+        @else
+            エラー
         @endif
     </div>
 
@@ -24,10 +26,30 @@
     </div>
 
     <div>
-        <form class="register-form__form" action="/register" method="post">
-            @csrf
-            <input class="register-form__btn btn" type="submit" value="出勤">
-        </form>
+        @if ($status == "absent")
+            <form class="" action="{{ route('attendance.clockIn') }}" method="post">
+                @csrf
+                <input class="" type="submit" value="出勤">
+            </form>
+        @elseif ($status == "working")
+            <form class="" action="{{ route('attendance.clockOut') }}" method="post">
+                @csrf
+                <input class="" type="submit" value="退勤">
+            </form>
+            <form class="" action="{{ route('attendance.breakStart') }}" method="post">
+                @csrf
+                <input class="" type="submit" value="休憩入">
+            </form>
+        @elseif ($status == "break")
+            <form class="" action="{{ route('attendance.breakEnd') }}" method="post">
+                @csrf
+                <input class="" type="submit" value="休憩戻">
+            </form>
+        @elseif ($status == "completed")
+            <p>お疲れ様でした。</p>
+        @else
+            <p>エラー</p>
+        @endif
     </div>
 </div>
-@endsection('content')
+@endsection
