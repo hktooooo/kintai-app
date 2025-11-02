@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Attendance;
 use Carbon\Carbon;
 
 class AdminAttendanceController extends Controller
@@ -21,12 +22,18 @@ class AdminAttendanceController extends Controller
 
         // 日付
         $now = Carbon::now();
+        $today = $now->toDateString();
 
         // 前月と翌月
         $prevMonth = $current->copy()->subMonth()->format('Y-m');
         $nextMonth = $current->copy()->addMonth()->format('Y-m');
 
-        return view('admin.attendance_list', compact('now', 'current', 'prevMonth', 'nextMonth'));
+        // 今日の勤怠情報全件取得 *****あとで日付ごとに対応するように直す
+        $attendances = Attendance::with('user')
+            ->whereDate('work_date', $today)
+            ->get();        
+
+        return view('admin.attendance_list', compact('now', 'current', 'prevMonth', 'nextMonth', 'attendances'));
     }
 
     // スタッフ一覧画面の表示
