@@ -111,6 +111,9 @@ class AttendanceController extends Controller
     // 勤怠一覧の表示
     public function show_list(Request $request)
     {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
+
         // クエリパラメータ ?month=2025-11 の形式で受け取る
         $monthParam = $request->query('month');
 
@@ -130,7 +133,13 @@ class AttendanceController extends Controller
         $prevMonth = $current->copy()->subMonth()->format('Y-m');
         $nextMonth = $current->copy()->addMonth()->format('Y-m');
 
-        return view('attendance_list', compact('dates', 'current', 'prevMonth', 'nextMonth'));
+        // 指定した月で取得
+        $attendances = Attendance::where('user_id', $userId)
+            ->whereYear('work_date', $current->year)
+            ->whereMonth('work_date', $current->month)
+            ->get();
+
+        return view('attendance_list', compact('attendances', 'dates', 'current', 'prevMonth', 'nextMonth'));
     }
 
     // 申請一覧画面の表示

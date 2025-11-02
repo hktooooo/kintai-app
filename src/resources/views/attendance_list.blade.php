@@ -29,22 +29,25 @@
             @php
                 $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
                 $formatted = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
+
+                // その日の勤怠データを探す
+                $attendanceForDate = $attendances->firstWhere('work_date', $date->toDateString());
             @endphp
             <tr>
                 <td>
                     {{ $formatted }}
                 </td>
                 <td>
-                    出勤時間
+                    {{ $attendanceForDate ? \Carbon\Carbon::parse($attendanceForDate->clock_in)->format('H:i') : '-' }}
                 </td>
                 <td>
-                    退勤時間
+                    {{ $attendanceForDate ? \Carbon\Carbon::parse($attendanceForDate->clock_out)->format('H:i') : '-' }}
                 </td>
                 <td>
                     休憩時間
                 </td>
                 <td>
-                    合計
+                    {{ $attendanceForDate ? $attendanceForDate->working_hours : '-' }}
                 </td>
                 <td>
                     <button>詳細</button>

@@ -16,9 +16,19 @@ class Attendance extends Model
         'status',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // 1つの勤怠に複数の休憩
     public function breaks()
     {
         return $this->hasMany(BreakTime::class);
+    }
+
+    public function corrections()
+    {
+        return $this->hasMany(AttendanceCorrection::class);
     }
 }

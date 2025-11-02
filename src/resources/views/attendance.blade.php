@@ -22,7 +22,7 @@
 
     <div>
         <p>今日は：{{ $now->format('Y年m月d日') }}（{{ $weekday }}）</p>
-        <p>今の時間は：{{ $now->format('H:i:s') }}</p>
+        <p>今の時間は：{{ $now->format('H:i') }}</p>
     </div>
 
     <div>

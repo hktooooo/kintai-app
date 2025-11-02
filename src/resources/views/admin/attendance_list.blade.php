@@ -19,36 +19,28 @@
     </p>
 
     <table>
-        <tr>
-            <th>名前</th>
-            <th>出勤</th>
-            <th>退勤</th>
-            <th>休憩</th>
-            <th>合計</th>
-            <th>詳細</th>
-        </tr>
-        XXXX
+        <thead>
             <tr>
-                <td>
-                    あああ
-                </td>
-                <td>
-                    出勤時間
-                </td>
-                <td>
-                    退勤時間
-                </td>
-                <td>
-                    休憩時間
-                </td>
-                <td>
-                    合計
-                </td>
-                <td>
-                    <button>詳細</button>
-                </td>
+                <th>名前</th>
+                <th>出勤</th>
+                <th>退勤</th>
+                <th>休憩</th>
+                <th>合計</th>
+                <th>詳細</th>
             </tr>
-        XXX
+        </thead>
+        <tbody>
+            @foreach ($attendances as $attendance)
+                <tr>
+                    <td>{{ $attendance->user->name ?? '不明' }}</td>
+                    <td>{{ $attendance->clock_in }}</td>
+                    <td>{{ $attendance->clock_out }}</td>
+                    <td>休憩時間</td>
+                    <td>{{ $attendance->working_hours }}</td>
+                    <td><button>詳細</button></td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 </div>
-@endsection('content')
+@endsection
