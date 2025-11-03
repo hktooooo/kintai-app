@@ -38,10 +38,14 @@
                     {{ $formatted }}
                 </td>
                 <td>
-                    {{ $attendanceForDate ? \Carbon\Carbon::parse($attendanceForDate->clock_in)->format('H:i') : '-' }}
+                    {{ $attendanceForDate && $attendanceForDate->clock_in
+                        ? \Carbon\Carbon::parse($attendanceForDate->clock_in)->format('H:i')
+                        : '-' }}
                 </td>
                 <td>
-                    {{ $attendanceForDate ? \Carbon\Carbon::parse($attendanceForDate->clock_out)->format('H:i') : '-' }}
+                    {{ $attendanceForDate && $attendanceForDate->clock_out
+                        ? \Carbon\Carbon::parse($attendanceForDate->clock_out)->format('H:i')
+                        : '-' }}
                 </td>
                 <td>
                     休憩時間
@@ -50,10 +54,16 @@
                     {{ $attendanceForDate ? $attendanceForDate->working_hours : '-' }}
                 </td>
                 <td>
-                    <button>詳細</button>
+                    @if ($attendanceForDate)
+                        <a href="{{ route('attendance.detail', ['id' => $attendanceForDate->id]) }}">
+                            <button>詳細</button>
+                        </a>
+                    @else
+                        <button disabled>詳細</button>
+                    @endif
                 </td>
             </tr>
         @endforeach
     </table>
 </div>
-@endsection('content')
+@endsection

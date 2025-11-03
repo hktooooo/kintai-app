@@ -22,6 +22,7 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+// 一般ユーザーログイン
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'showMain'])->name('home');
     Route::post('/attendance/clock_in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
@@ -30,7 +31,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance/break_end', [AttendanceController::class, 'breakEnd'])->name('attendance.breakEnd');
     Route::get('/attendance/list', [AttendanceController::class, 'show_list'])->name('attendance_list');
     Route::get('/stamp_correction_request/list', [AttendanceController::class, 'show_stamp_list'])->name('stamp_list');
-    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'show_detail'])->name('detail');
+    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'showDetail'])->name('attendance.detail');
+    Route::post('/attendance/detail/correction', [AttendanceController::class, 'showDetailCorrection'])->name('attendance.detail.correction');
 });
-
-

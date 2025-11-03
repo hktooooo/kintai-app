@@ -7,31 +7,34 @@
 @section('content')
 <div class="">
     <h1>勤怠詳細</h1>
-    <table>
-        <tr>
-            <th>名前</th>
-            <td>あああ</td>
-        </tr>
-        <tr>
-            <th>日付</th>
-            <td>2023年 6月 1日</td>
-        </tr>
-        <tr>
-            <th>出勤・退勤</th>
-            <td>09:00～18:00</td>
-        </tr>
-        <tr>
-            <th>休憩</th>
-            <td>12:00～13:00</td>
-        </tr>
-        <tr>
-            <th>備考</th>
-            <td>電車遅延のため</td>
-        </tr>
-    </table>
-    <div>
-        <button>修正</button>
-        <p>*承認待ちのため修正はできません。</p>
-    </div>
+    <form action="{{ route('attendance.detail.correction', ['id' => $attendance->id]) }}" method="post">
+    @csrf
+        <table>
+            <tr>
+                <th>名前</th>
+                <td>{{ $attendance->user->name }}</td>
+            </tr>
+            <tr>
+                <th>日付</th>
+                <td>{{ $attendance->work_date }}</td>
+            </tr>
+            <tr>
+                <th>出勤・退勤</th>
+                <td><input type="text" value="{{ $attendance->clock_in }}">～<input type="text" value="{{ $attendance->clock_out }}"></td>
+            </tr>
+            <tr>
+                <th>休憩</th>
+                <td><input type="text" value="">～<input value=""></td>
+            </tr>
+            <tr>
+                <th>備考</th>
+                <td><input type="text" value=""></td>
+            </tr>
+        </table>
+        <div>
+            <button>修正</button>
+            <p>*承認待ちのため修正はできません。</p>
+        </div>
+    </form>
 </div>
-@endsection('content')
+@endsection

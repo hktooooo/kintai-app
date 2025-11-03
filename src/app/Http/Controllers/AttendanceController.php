@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -150,13 +151,27 @@ class AttendanceController extends Controller
     }
 
     // 勤怠詳細画面の表示
-    public function show_detail(Request $request)
+    public function showDetail($id)
     {
-        $id = $request->query('id');
-        $id = empty($id) ? 0 : $id; 
-        return view('attendance_detail', compact('id'));  
+        // 勤怠データを1件取得
+        $attendance = Attendance::with('user')->findOrFail($id);
+
+        // 詳細ページに渡す
+        return view('attendance_detail', compact('attendance'));
     }
 
-    
+    // 勤怠詳細画面から修正を申請
+    public function showDetailCorrection($request)
+    {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
 
+        // 修正情報を新規登録 ????????
+        AttendanceCorrection::create([
+            'user_id' => $userId,
+            'work_date' => $today,
+            'clock_in' => $now->format('H:i:s'),
+            'status' => 'working',
+        ]);
+    }
 }
