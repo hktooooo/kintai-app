@@ -144,10 +144,31 @@ class AttendanceController extends Controller
     }
 
     // 申請一覧画面の表示
-    public function show_stamp_list()
+    public function show_stamp_list(Request $request)
     {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
+        
+        $tab = $request->query('tab');
+        $tab = empty($tab) ? 'pending' : $tab;    // tabが空の場合は 'recommend'
 
-        return view('stamp_correction_request_list');  
+        if ($tab === 'pending') {
+            // 承認待ち
+            $corrections = AttendanceCorrection::with(['user', 'attendance'])
+                ->where('user_id', $userId)
+                ->where('approval_status', 'pending')
+                ->orderBy('requested_date', 'desc') // 降順
+                ->get();
+        } else {
+            // 承認済み
+            $corrections = AttendanceCorrection::with(['user', 'attendance'])
+                ->where('user_id', $userId)
+                ->where('approval_status', 'approved')
+                ->orderBy('requested_date', 'desc') // 降順
+                ->get();
+        }
+
+        return view('stamp_correction_request_list', compact('corrections', 'tab'));  
     }
 
     // 勤怠詳細画面の表示

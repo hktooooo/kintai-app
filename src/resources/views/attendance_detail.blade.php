@@ -15,8 +15,6 @@
         $isPending = $latestCorrection && $latestCorrection->approval_status === 'pending';
     @endphp
 
-    {{ optional($attendance->corrections->last())->approval_status }}
-
     <form action="{{ route('submit.detail.correction') }}" method="post">
     @csrf
         <input type="hidden" name="id" id="id" value="{{ $attendance->id }}">

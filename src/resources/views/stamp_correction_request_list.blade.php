@@ -9,8 +9,8 @@
     <h1>申請一覧</h1>
 
     <div>
-        <a href="{{ route('stamp_list', ['tab' => '']) }}">承認待ち</a>
-        <a href="{{ route('stamp_list', ['tab' => '']) }}">承認済み</a>
+        <a class="stamp__list__link {{ $tab === 'pending' ? 'active' : '' }}" href="{{ route('stamp_list', ['tab' => 'pending']) }}">承認待ち</a>
+        <a class="stamp__list__link {{ $tab === 'approved' ? 'active' : '' }}" href="{{ route('stamp_list', ['tab' => 'approved']) }}">承認済み</a>
     </div>
 
     <table>
@@ -23,28 +23,36 @@
             <th>詳細</th>
         </tr>
 
-        {{-- @foreach ($dates as $date) --}}
+        @foreach ($corrections as $correction)
             <tr>
                 <td>
-                    承認待ち
+                    @if ($correction->approval_status === 'pending')
+                        承認待ち
+                    @elseif ($correction->approval_status === 'approved')
+                        承認済み
+                    @else
+                        エラー
+                    @endif
                 </td>
                 <td>
-                    あああ
+                    {{ $correction->user->name }}
                 </td>
                 <td>
-                    2023/06/01
+                    {{ $correction->attendance->work_date }}
                 </td>
                 <td>
-                    遅延のため
+                    {{ $correction->attendance->reason }}
                 </td>
                 <td>
-                    2023/06/01
+                    {{ $correction->requested_date }}
                 </td>
                 <td>
-                    <button>詳細</button>
+                    <a href="{{ route('attendance.detail', ['id' => $correction->attendance_id]) }}">
+                        詳細
+                    </a>
                 </td>
             </tr>
-        {{-- @endforeach --}}
+        @endforeach
     </table>
 </div>
-@endsection('content')
+@endsection
