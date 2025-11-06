@@ -154,24 +154,49 @@ class AttendanceController extends Controller
     public function showDetail($id)
     {
         // 勤怠データを1件取得
-        $attendance = Attendance::with('user')->findOrFail($id);
+        $attendance = Attendance::with(['user', 'corrections'])->findOrFail($id);
 
         // 詳細ページに渡す
         return view('attendance_detail', compact('attendance'));
     }
 
     // 勤怠詳細画面から修正を申請
-    public function showDetailCorrection($request)
+    public function submitDetailCorrection(Request $request)
     {
         // 現在ログインしているユーザーID
         $userId = Auth::id();
 
-        // 修正情報を新規登録 ????????
+        // 現在日付
+        $today = Carbon::now()->toDateString();
+
+        $attendance_id = $request->id;
+
+        // 修正情報を新規登録
         AttendanceCorrection::create([
             'user_id' => $userId,
-            'work_date' => $today,
-            'clock_in' => $now->format('H:i:s'),
-            'status' => 'working',
+            'attendance_id' => $attendance_id,
+            'requested_date' => $today,
+            'approval_status' => 'pending',
         ]);
+
+        // 対象の出勤記録を取得
+        $attendance = Attendance::findOrFail($attendance_id);
+
+        // 値を更新
+        $attendance->clock_in = $request->clock_in;
+        $attendance->clock_out = $request->clock_out;
+        $attendance->reason = $request->reason;
+
+        // 勤務時間を計算（時間単位で）
+        $start = Carbon::parse($attendance->clock_in);
+        $end = Carbon::parse($attendance->clock_out);
+        $workingHours = $start->diffInMinutes($end) / 60; // 分→時間に変換
+
+        $attendance->working_hours = round($workingHours, 2);
+
+        // 保存
+        $attendance->save();
+
+        return redirect()->back();
     }
 }

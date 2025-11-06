@@ -18,7 +18,6 @@ class CreateAttendanceCorrectionsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('attendance_id')->constrained('attendances')->onDelete('cascade');
             $table->date('requested_date');
-            $table->text('reason')->nullable();
             $table->string('approval_status')->default('pending'); // pending, approved, rejected
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
