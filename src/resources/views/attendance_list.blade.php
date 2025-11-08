@@ -56,7 +56,7 @@
                 <td>
                     @if ($attendanceForDate)
                         <a href="{{ route('attendance.detail', ['id' => $attendanceForDate->id]) }}">
-                            <button>詳細</button>
+                            詳細
                         </a>
                     @else
                         <button disabled>詳細</button>

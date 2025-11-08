@@ -17,8 +17,10 @@ Route::prefix('admin')->group(function () {
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/attendance/list', [AdminAttendanceController::class, 'admin_show_list'])->name('admin.list');
-        Route::get('/staff/list', [AdminAttendanceController::class, 'show_staff_list']);
+        Route::get('/attendance/list', [AdminAttendanceController::class, 'adminShowList'])->name('admin.list');
+        Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'adminShowDetail'])->name('admin.detail');
+        Route::post('/attendance/detail/correction', [AdminAttendanceController::class, 'adminDetailCorrection'])->name('admin.detail.correction');
+        Route::get('/staff/list', [AdminAttendanceController::class, 'showStaffList']);
     });
 });
 
