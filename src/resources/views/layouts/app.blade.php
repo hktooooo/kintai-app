@@ -16,26 +16,50 @@
             <a class="header__heading" href="/">
                 <img src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
             </a>
-            @if (Auth::check())
-            <nav>
-                <ul class="header-nav">
-                    <li class="header-nav__item">
-                        <a class="" href="/attendance">勤怠</a>
-                    </li>
-                    <li class="header-nav__item">
-                        <a class="" href="/attendance/list">勤怠一覧</a>
-                    </li>
-                    <li class="header-nav__item">
-                        <a class="" href="{{ route('stamp_list')}}">申請</a>
-                    </li>
-                    <li class="header-nav__item">
-                        <form action="/logout" method="post">
-                        @csrf
-                            <button class="header-nav__link-logout">ログアウト</button>
-                        </form>
-                    </li>
-                </ul>
-            </nav>
+
+            @if(Auth::guard('admin')->check())
+                {{-- 管理者用ナビ --}}
+                <nav>
+                    <ul class="header-nav">
+                        <li class="header-nav__item">
+                            <a href="/admin/attendance/list">勤怠一覧</a>
+                        </li>
+                        <li class="header-nav__item">
+                            <a href="/admin/staff/list">スタッフ一覧</a>
+                        </li>
+                        <li class="header-nav__item">
+                            <a class="" href="{{ route('stamp_list')}}">申請一覧</a>
+                        </li>
+                        <li class="header-nav__item">
+                            <form action="/admin/logout" method="post">
+                                @csrf
+                                <button class="header-nav__link-logout">ログアウト</button>
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
+
+            @elseif (Auth::check())
+                {{-- 一般ユーザー用ナビ --}}
+                <nav>
+                    <ul class="header-nav">
+                        <li class="header-nav__item">
+                            <a class="" href="/attendance">勤怠</a>
+                        </li>
+                        <li class="header-nav__item">
+                            <a class="" href="/attendance/list">勤怠一覧</a>
+                        </li>
+                        <li class="header-nav__item">
+                            <a class="" href="{{ route('stamp_list')}}">申請</a>
+                        </li>
+                        <li class="header-nav__item">
+                            <form action="/logout" method="post">
+                            @csrf
+                                <button class="header-nav__link-logout">ログアウト</button>
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
             @endif
         </header>
         <div class="content">
