@@ -8,40 +8,75 @@ use Carbon\Carbon;
 
 class AdminAttendanceController extends Controller
 {
-    // 勤怠一覧の表示
-    public function admin_show_list(Request $request)
+    // 管理者 勤怠一覧の表示
+    public function adminShowList(Request $request)
     {
-        // クエリパラメータ ?month=2025-11 の形式で受け取る
-        $monthParam = $request->query('month');
+        // クエリパラメータ ?day=2025-01-01 の形式で受け取る
+        $dayParam = $request->query('day');
 
-        // 指定がなければ今月
-        $current = $monthParam ? Carbon::parse($monthParam) : Carbon::now();
+        // 指定がなければ今日
+        try {
+            $current = $dayParam ? Carbon::parse($dayParam) : Carbon::today();
+        } catch (\Exception $e) {
+            // 不正な日付が来た場合は今日にフォールバック
+            $current = Carbon::today();
+        }
 
-        $startOfMonth = $current->copy()->startOfMonth();
-        $endOfMonth = $current->copy()->endOfMonth();
+        // 検索日と前日と翌日（リンク用）
+        $today = $current->copy()->toDateString();
+        $prevDay = $current->copy()->subDay()->toDateString();
+        $nextDay = $current->copy()->addDay()->toDateString();
 
-        // 日付
-        $now = Carbon::now();
-        $today = $now->toDateString();
-
-        // 前月と翌月
-        $prevMonth = $current->copy()->subMonth()->format('Y-m');
-        $nextMonth = $current->copy()->addMonth()->format('Y-m');
-
-        // 今日の勤怠情報全件取得 *****あとで日付ごとに対応するように直す
+        // 今日の勤怠情報を全件取得（ユーザー情報込み）
         $attendances = Attendance::with('user')
             ->whereDate('work_date', $today)
-            ->get();        
+            ->get();
 
-        return view('admin.attendance_list', compact('now', 'current', 'prevMonth', 'nextMonth', 'attendances'));
+        return view('admin.attendance_list', compact('current', 'prevDay', 'nextDay', 'attendances'));
+    }
+
+    // 管理者 勤怠詳細画面の表示
+    public function adminShowDetail($id)
+    {
+        // 勤怠データを1件取得
+        $attendance = Attendance::with(['user', 'corrections'])->findOrFail($id);
+
+        // 詳細ページに渡す
+        return view('admin.attendance_detail', compact('attendance'));
+    }
+
+    // 管理者 勤怠詳細画面から修正
+    public function adminDetailCorrection(Request $request)
+    {
+        $attendance_id = $request->id;
+
+        // 対象の出勤記録を取得
+        $attendance = Attendance::findOrFail($attendance_id);
+
+        // 値を更新
+        $attendance->clock_in = $request->clock_in;
+        $attendance->clock_out = $request->clock_out;
+        $attendance->reason = $request->reason;
+
+        // 勤務時間を計算（時間単位で）
+        $start = Carbon::parse($attendance->clock_in);
+        $end = Carbon::parse($attendance->clock_out);
+        $workingHours = $start->diffInMinutes($end) / 60; // 分→時間に変換
+
+        $attendance->working_hours = round($workingHours, 2);
+
+        // 保存
+        $attendance->save();
+
+        return redirect()->back();
     }
 
     // スタッフ一覧画面の表示
-    public function show_staff_list()
+    public function showStaffList()
     {
         return view('admin.staff_list');  
     }
 
-   
+
 
 }

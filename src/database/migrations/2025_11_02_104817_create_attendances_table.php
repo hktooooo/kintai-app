@@ -27,6 +27,9 @@ class CreateAttendancesTable extends Migration
             // 状態など
             $table->string('status')->default('absent'); // absent，working, completed, break
 
+            // 修正時の理由
+            $table->text('reason')->nullable();
+
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });

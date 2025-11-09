@@ -13,7 +13,6 @@ class AttendanceCorrection extends Model
         'user_id',
         'attendance_id',
         'requested_date',
-        'reason',
         'approval_status',
     ];
 

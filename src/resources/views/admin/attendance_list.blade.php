@@ -7,15 +7,15 @@
 @section('content')
 <div class="">
     @php
-        $formatted = $now->format('Y年m月d日');
+        $formatted = $current->format('Y年m月d日');
     @endphp
     <h1>{{ $formatted }}の勤怠</h1>
 
-    <h2>{{ $now->format('Y/m/d') }} の日付一覧</h2>
+    <h2>{{ $current->format('Y/m/d') }} の日付一覧</h2>
 
     <p>
-        <a href="{{ url('/attendance/list?month=' . $prevMonth) }}">← 前日</a> |
-        <a href="{{ url('/attendance/list?month=' . $nextMonth) }}">翌日 →</a>
+        <a href="{{ url('/admin/attendance/list?day=' . $prevDay) }}">← 前日</a> |
+        <a href="{{ url('/admin/attendance/list?day=' . $nextDay) }}">翌日 →</a>
     </p>
 
     <table>
@@ -37,7 +37,11 @@
                     <td>{{ $attendance->clock_out }}</td>
                     <td>休憩時間</td>
                     <td>{{ $attendance->working_hours }}</td>
-                    <td><button>詳細</button></td>
+                    <td>
+                        <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}">
+                            詳細 {{ $attendance->id }}
+                        </a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

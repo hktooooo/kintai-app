@@ -92,9 +92,6 @@ class AuthController extends Controller
         return back()->with('status', 'verification-link-sent');
     }
 
-
-
-
     // ログイン時の処理
     public function login(LoginRequest $request)
     {
@@ -102,11 +99,20 @@ class AuthController extends Controller
         
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended('/attendance');
         }
 
         return back()->withErrors([
             'email' => 'ログイン情報が登録されていません',
         ]);
+    }
+
+    // ログアウト時の処理
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login');
     }
 }

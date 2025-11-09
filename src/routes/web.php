@@ -17,11 +17,14 @@ Route::prefix('admin')->group(function () {
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/attendance/list', [AdminAttendanceController::class, 'admin_show_list'])->name('admin.list');
-        Route::get('/staff/list', [AdminAttendanceController::class, 'show_staff_list']);
+        Route::get('/attendance/list', [AdminAttendanceController::class, 'adminShowList'])->name('admin.list');
+        Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'adminShowDetail'])->name('admin.detail');
+        Route::post('/attendance/detail/correction', [AdminAttendanceController::class, 'adminDetailCorrection'])->name('admin.detail.correction');
+        Route::get('/staff/list', [AdminAttendanceController::class, 'showStaffList']);
     });
 });
 
+// 一般ユーザーログイン
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'showMain'])->name('home');
     Route::post('/attendance/clock_in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
@@ -29,8 +32,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance/break_start', [AttendanceController::class, 'breakStart'])->name('attendance.breakStart');
     Route::post('/attendance/break_end', [AttendanceController::class, 'breakEnd'])->name('attendance.breakEnd');
     Route::get('/attendance/list', [AttendanceController::class, 'show_list'])->name('attendance_list');
-    Route::get('/stamp_correction_request/list', [AttendanceController::class, 'show_stamp_list'])->name('stamp_list');
-    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'show_detail'])->name('detail');
+    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'showDetail'])->name('attendance.detail');
+    Route::post('/attendance/detail/correction', [AttendanceController::class, 'submitDetailCorrection'])->name('submit.detail.correction');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-
+// 管理者、一般ユーザー両方からアクセス
+Route::middleware(['auth:web,admin'])->group(function () {
+    Route::get('/stamp_correction_request/list', [AttendanceController::class, 'show_stamp_list'])->name('stamp_list');
+});

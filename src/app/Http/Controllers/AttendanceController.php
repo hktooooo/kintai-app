@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -143,20 +144,80 @@ class AttendanceController extends Controller
     }
 
     // 申請一覧画面の表示
-    public function show_stamp_list()
+    public function show_stamp_list(Request $request)
     {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
+        
+        $tab = $request->query('tab');
+        $tab = empty($tab) ? 'pending' : $tab;    // tabが空の場合は 'recommend'
 
-        return view('stamp_correction_request_list');  
+        if ($tab === 'pending') {
+            // 承認待ち
+            $corrections = AttendanceCorrection::with(['user', 'attendance'])
+                ->where('user_id', $userId)
+                ->where('approval_status', 'pending')
+                ->orderBy('requested_date', 'desc') // 降順
+                ->get();
+        } else {
+            // 承認済み
+            $corrections = AttendanceCorrection::with(['user', 'attendance'])
+                ->where('user_id', $userId)
+                ->where('approval_status', 'approved')
+                ->orderBy('requested_date', 'desc') // 降順
+                ->get();
+        }
+
+        return view('stamp_correction_request_list', compact('corrections', 'tab'));  
     }
 
     // 勤怠詳細画面の表示
-    public function show_detail(Request $request)
+    public function showDetail($id)
     {
-        $id = $request->query('id');
-        $id = empty($id) ? 0 : $id; 
-        return view('attendance_detail', compact('id'));  
+        // 勤怠データを1件取得
+        $attendance = Attendance::with(['user', 'corrections'])->findOrFail($id);
+
+        // 詳細ページに渡す
+        return view('attendance_detail', compact('attendance'));
     }
 
-    
+    // 勤怠詳細画面から修正を申請
+    public function submitDetailCorrection(Request $request)
+    {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
 
+        // 現在日付
+        $today = Carbon::now()->toDateString();
+
+        $attendance_id = $request->id;
+
+        // 修正情報を新規登録
+        AttendanceCorrection::create([
+            'user_id' => $userId,
+            'attendance_id' => $attendance_id,
+            'requested_date' => $today,
+            'approval_status' => 'pending',
+        ]);
+
+        // 対象の出勤記録を取得
+        $attendance = Attendance::findOrFail($attendance_id);
+
+        // 値を更新
+        $attendance->clock_in = $request->clock_in;
+        $attendance->clock_out = $request->clock_out;
+        $attendance->reason = $request->reason;
+
+        // 勤務時間を計算（時間単位で）
+        $start = Carbon::parse($attendance->clock_in);
+        $end = Carbon::parse($attendance->clock_out);
+        $workingHours = $start->diffInMinutes($end) / 60; // 分→時間に変換
+
+        $attendance->working_hours = round($workingHours, 2);
+
+        // 保存
+        $attendance->save();
+
+        return redirect()->back();
+    }
 }

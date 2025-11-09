@@ -14,6 +14,7 @@ class Attendance extends Model
         'clock_out',
         'working_hours',
         'status',
+        'reason',
     ];
 
     public function user()
