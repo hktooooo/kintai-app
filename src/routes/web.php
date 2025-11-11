@@ -10,10 +10,15 @@ Route::get('/register', [AuthController::class, 'show_register']);
 Route::post('/register', [AuthController::class, 'store_user']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// メール認証
+Route::get('/email/verify', [AuthController::class, 'verifyNotice'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/resend', [AuthController::class, 'resendVerification'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // 管理者ログイン
 Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'show_admin_login'])->name('admin.login');
-    Route::post('/login', [AdminLoginController::class, 'login']);
+    Route::get('/login', [AdminLoginController::class, 'show_admin_login'])->name('admin.login')->middleware('guest:admin');
+    Route::post('/login', [AdminLoginController::class, 'login'])->middleware('guest:admin');
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
     Route::middleware('auth:admin')->group(function () {
@@ -25,7 +30,7 @@ Route::prefix('admin')->group(function () {
 });
 
 // 一般ユーザーログイン
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'showMain'])->name('home');
     Route::post('/attendance/clock_in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
     Route::post('/attendance/clock_out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');

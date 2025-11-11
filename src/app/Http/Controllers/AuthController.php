@@ -33,32 +33,14 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // メール認証用メール送信
+        event(new Registered($user));
+
         Auth::login($user);
 
-        return redirect()->route('home');
+        // メール認証通知画面にリダイレクト
+        return redirect()->route('verification.notice');
     }
-
-
-
-
-    // // 登録時の処理
-    // public function store_user(RegisterRequest $request)
-    // {
-    //     // ユーザー作成
-    //     $user = User::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'password' => Hash::make($request->password),
-    //     ]);
-
-    //     // メール認証用メール送信
-    //     event(new Registered($user));
-
-    //     Auth::login($user);
-
-    //     // メール認証通知画面にリダイレクト
-    //     return redirect()->route('verification.notice');
-    // }
 
     // メール認証通知画面
     public function verifyNotice() {
@@ -78,13 +60,13 @@ class AuthController extends Controller
             event(new Verified($user));
         }
 
-        return redirect('/mypage/profile')->with('verified', true);
+        return redirect()->route('home')->with('verified', true);
     }
 
     // 確認メール再送信
     public function resendVerification(Request $request) {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect('/');
+            return redirect()->route('home');
         }
 
         $request->user()->sendEmailVerificationNotification();
