@@ -6,13 +6,13 @@
 
 @section('content')
 <div class="">
-    <h1>勤怠一覧</h1>
+    <h1>{{ str_replace([' ', '　'], '', $user->name) }}さんの一覧</h1>
 
     <h2>{{ $current->format('Y年n月') }} の日付一覧</h2>
 
     <p>
-        <a href="{{ url('/attendance/list?month=' . $prevMonth) }}">← 前月</a> |
-        <a href="{{ url('/attendance/list?month=' . $nextMonth) }}">翌月 →</a>
+        <a href="{{ route('admin.attendance_staff_list', ['id' => $user->id, 'month' => $prevMonth]) }}">← 前月</a> |
+        <a href="{{ route('admin.attendance_staff_list', ['id' => $user->id, 'month' => $nextMonth]) }}">翌月 →</a>
     </p>
 
     <table>
@@ -55,7 +55,7 @@
                 </td>
                 <td>
                     @if ($attendanceForDate)
-                        <a href="{{ route('attendance.detail', ['id' => $attendanceForDate->id]) }}">
+                        <a href="{{ route('admin.detail', ['id' => $attendanceForDate->id]) }}">
                             詳細
                         </a>
                     @else
@@ -65,5 +65,7 @@
             </tr>
         @endforeach
     </table>
+
+    <button>CSV出力</button>
 </div>
 @endsection

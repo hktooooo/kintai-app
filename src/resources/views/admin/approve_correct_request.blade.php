@@ -15,9 +15,9 @@
         $isPending = $latestCorrection && $latestCorrection->approval_status === 'pending';
     @endphp
 
-    <form action="{{ route('submit.detail.correction') }}" method="post">
+    <form action="{{ route('admin.approve_correct_request_exec') }}" method="post">
     @csrf
-        <input type="hidden" name="id" id="id" value="{{ $attendance->id }}">
+        <input type="hidden" name="attendance_correct_request_id" id="attendance_correct_request_id" value="{{ $attendance_correct_request_id }}">
         <table>
             <tr>
                 <th>名前</th>
@@ -30,9 +30,9 @@
             <tr>
                 <th>出勤・退勤</th>
                 <td>
-                    <input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in }}" @if($isPending) disabled @endif>
+                    <input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in }}" disabled>
                     ～
-                    <input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out }}" @if($isPending) disabled @endif>
+                    <input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out }}" disabled>
                 </td>
             </tr>
             @foreach ($break_times as $break_time)
@@ -45,26 +45,26 @@
                     </th>
                     <td>
                         <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}">
-                        <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start }}" @if($isPending) disabled @endif>
+                        <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start }}" disabled>
                         ～
-                        <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end }}" @if($isPending) disabled @endif>
+                        <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end }}" disabled>
                     </td>
                 </tr>
             @endforeach
             <tr>
                 <th>備考</th>
                 <td>
-                    <input type="text" name="reason" id="reason" value="{{ $attendance->reason }}" @if($isPending) disabled @endif>
+                    <input type="text" name="reason" id="reason" value="{{ $attendance->reason }}" disabled>
                 </td>
             </tr>
         </table>
         <div>
             @if($latestCorrection && $latestCorrection->approval_status === 'pending')
                 {{-- 承認待ちの場合 --}}
-                <p>*承認待ちのため修正はできません。</p>
+                <button type="submit">承認</button>
             @else
-                {{-- 承認待ちでない場合（初回 or 却下済） --}}
-                <button type="submit">修正</button>
+                {{-- 承認済みの場合 --}}
+                <p>承認済み</p>
             @endif
         </div>
     </form>

@@ -1,0 +1,49 @@
+.search-form {
+    display: none;
+}
+
+.header nav {
+    display: none;
+}
+
+.verify-email__content {
+    text-align: center;
+}
+
+.verify-email__inner {
+    margin-top: 237px;
+}
+
+.verify-email__message {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.verify-email__btn {
+    margin: 62px auto;
+    display: block;
+    width: 257px;
+    height: 69px;
+    line-height: 69px;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+    color: #000;
+    font-weight: bold;
+    font-size: 24px;
+    border: 1px solid #000;
+}
+
+.verify-email__link-send {
+    display: block;
+    padding-bottom: 6px;
+    color: #0073CC;
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.verify-email__success-message {
+    font-size: 16px;
+    color: #000;
+    width: 100%;
+}

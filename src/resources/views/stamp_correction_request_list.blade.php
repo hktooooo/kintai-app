@@ -47,9 +47,15 @@
                     {{ $correction->requested_date }}
                 </td>
                 <td>
-                    <a href="{{ route('attendance.detail', ['id' => $correction->attendance_id]) }}">
-                        詳細
-                    </a>
+                    @if(Auth::guard('admin')->check())
+                        <a href="{{ route('admin.approve_correct_request', ['attendance_correct_request_id' => $correction->attendance_id]) }}">
+                            詳細
+                        </a>
+                    @elseif(Auth::check())
+                        <a href="{{ route('attendance.detail', ['id' => $correction->attendance_id]) }}">
+                            詳細
+                        </a>
+                    @endif
                 </td>
             </tr>
         @endforeach

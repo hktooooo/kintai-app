@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
+use App\Models\BreakTime;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AdminAttendanceController extends Controller
@@ -40,9 +43,10 @@ class AdminAttendanceController extends Controller
     {
         // 勤怠データを1件取得
         $attendance = Attendance::with(['user', 'corrections'])->findOrFail($id);
+        $break_times = BreakTime::where('attendance_id', $id)->get();
 
         // 詳細ページに渡す
-        return view('admin.attendance_detail', compact('attendance'));
+        return view('admin.attendance_detail', compact('attendance', 'break_times'));
     }
 
     // 管理者 勤怠詳細画面から修正
@@ -74,9 +78,75 @@ class AdminAttendanceController extends Controller
     // スタッフ一覧画面の表示
     public function showStaffList()
     {
-        return view('admin.staff_list');  
+        $users = User::all();
+        return view('admin.staff_list', compact('users'));  
     }
 
+    // スタッフ一覧画面の表示
+    public function showAttendanceStaffList($id, Request $request)
+    {
+        // $idで受け取ったユーザーID
+        $userId = $id;
 
+        // ユーザー情報
+        $user = User::findOrFail($userId);
 
+        // クエリパラメータ ?month=2025-11 の形式で受け取る
+        $monthParam = $request->query('month');
+
+        // 指定がなければ今月
+        $current = $monthParam ? Carbon::parse($monthParam) : Carbon::now();
+
+        $startOfMonth = $current->copy()->startOfMonth();
+        $endOfMonth = $current->copy()->endOfMonth();
+
+        // 日付を配列に追加
+        $dates = [];
+        for ($date = $startOfMonth->copy(); $date->lte($endOfMonth); $date->addDay()) {
+            $dates[] = $date->copy();
+        }
+
+        // 前月と翌月
+        $prevMonth = $current->copy()->subMonth()->format('Y-m');
+        $nextMonth = $current->copy()->addMonth()->format('Y-m');
+
+        // 指定した月で取得
+        $attendances = Attendance::with('breaks')
+            ->where('user_id', $userId)
+            ->whereYear('work_date', $current->year)
+            ->whereMonth('work_date', $current->month)
+            ->get();
+
+        return view('admin.attendance_staff_list', compact('user', 'attendances', 'dates', 'current', 'prevMonth', 'nextMonth'));
+    }
+
+    // 修正申請承認画面の表示
+    public function approveCorrectRequest($attendance_correct_request_id)
+    {
+        // 修正申請データを取得
+        $attendance_correction = AttendanceCorrection::where('id', $attendance_correct_request_id)->firstOrFail();
+        $attendance_id = $attendance_correction -> attendance_id;
+
+        // 勤怠データを取得
+        $attendance = Attendance::with(['user', 'corrections'])
+            ->findOrFail($attendance_id);
+        $break_times = BreakTime::where('attendance_id', $attendance_id)
+            ->get();
+
+        // 承認ページに渡す
+        return view('admin.approve_correct_request', compact('attendance', 'break_times', 'attendance_correct_request_id'));
+    }
+
+    // 修正申請承認の実行
+    public function approveCorrectRequestExec(Request $request)
+    {
+        // 修正申請データを取得
+        $attendance_correct_request_id = $request->attendance_correct_request_id;
+        $attendance_correction = AttendanceCorrection::where('id', $attendance_correct_request_id)->firstOrFail();
+
+        $attendance_correction->approval_status = 'approved'; 
+        $attendance_correction->save();
+
+        return redirect()->back();
+    }    
 }

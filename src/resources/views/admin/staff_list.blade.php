@@ -14,19 +14,21 @@
             <th>メールアドレス</th>
             <th>月次勤怠</th>
         </tr>
-        XXXX
+        @foreach ($users as $user)
             <tr>
                 <td>
-                    あああ
+                    {{ $user -> name }}
                 </td>
                 <td>
-                    メール
+                    {{ $user -> email }}
                 </td>
                 <td>
-                    <button>詳細</button>
+                    <a href="{{ route('admin.attendance_staff_list', ['id' => $user->id]) }}">
+                        詳細
+                    </a>
                 </td>
             </tr>
-        XXX
+        @endforeach
     </table>
 </div>
-@endsection('content')
+@endsection

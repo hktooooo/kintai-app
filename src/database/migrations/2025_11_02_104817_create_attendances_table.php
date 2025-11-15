@@ -21,8 +21,11 @@ class CreateAttendancesTable extends Migration
             $table->time('clock_in')->nullable();
             $table->time('clock_out')->nullable();
 
-            // 実働時間（休憩を除いた勤務時間）
-            $table->decimal('working_hours', 5, 2)->nullable();
+            // 実働時間（休憩を除いた勤務時間）（例：00:00:00時間）
+            $table->time('working_hours')->nullable();
+
+            // この日の休憩の合計（例：00:00:00時間）
+            $table->time('total_break')->nullable();
 
             // 状態など
             $table->string('status')->default('absent'); // absent，working, completed, break

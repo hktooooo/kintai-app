@@ -18,8 +18,11 @@ class CreateBreaksTable extends Migration
             $table->time('break_start')->nullable();
             $table->time('break_end')->nullable();
 
-            // この休憩の合計時間（例：1.00時間）
-            $table->decimal('break_hours', 4, 2)->nullable();
+            // この休憩の時間（例：00:00:00時間）
+            $table->time('break_hours')->nullable();
+
+            // この休憩の時間（例：0秒）
+            $table->integer('break_seconds')->nullable();
 
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
