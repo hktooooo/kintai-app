@@ -48,10 +48,10 @@
                         : '-' }}
                 </td>
                 <td>
-                    休憩時間
+                    {{ $attendanceForDate && $attendanceForDate->total_break ? \Carbon\Carbon::parse($attendanceForDate->total_break)->format('H:i') : '-' }}
                 </td>
                 <td>
-                    {{ $attendanceForDate ? $attendanceForDate->working_hours : '-' }}
+                    {{ $attendanceForDate ? \Carbon\Carbon::parse($attendanceForDate->working_hours)->format('H:i') : '-' }}
                 </td>
                 <td>
                     @if ($attendanceForDate)

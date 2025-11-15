@@ -13,6 +13,7 @@ class Attendance extends Model
         'clock_in',
         'clock_out',
         'working_hours',
+        'total_break',
         'status',
         'reason',
     ];

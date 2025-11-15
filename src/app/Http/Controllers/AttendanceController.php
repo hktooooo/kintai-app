@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
+use App\Models\BreakTime;
 use App\Models\AttendanceCorrection;
 use Carbon\Carbon;
 
@@ -98,9 +99,30 @@ class AttendanceController extends Controller
         // 勤務時間を計算（時間単位で）
         $start = Carbon::parse($attendance->clock_in);
         $end = Carbon::parse($attendance->clock_out);
-        $workingHours = $start->diffInMinutes($end) / 60; // 分→時間に変換
+        
+        // 秒差
+        $seconds = $start->diffInSeconds($end);
 
-        $attendance->working_hours = round($workingHours, 2);
+        // 休憩時間の合計を取得
+        $total_break = $attendance->total_break; // HH:MM:SS 文字列
+
+        // 秒に変換
+        if ($total_break) {
+            $parts = explode(':', $total_break);
+            $total_break_seconds = ($parts[0] * 3600) + ($parts[1] * 60) + $parts[2];
+        } else {
+            $total_break_seconds = 0;
+        }
+
+        $seconds -= $total_break_seconds;
+
+        // 時・分・秒に分解
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $secs = $seconds % 60;
+
+        // HH:MM:SS に整形
+        $attendance->working_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
 
         // 保存
         $attendance->save(); 
@@ -108,6 +130,95 @@ class AttendanceController extends Controller
         return back();
     }
 
+    // 休憩開始登録
+    public function breakStart(Request $request)
+    {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
+
+        // 今日の日付と現在時刻
+        $now = Carbon::now();
+        $today = $now->toDateString();
+
+        // 今日の出勤記録を取得
+        $attendance = Attendance::where('user_id', $userId)
+            ->whereDate('work_date', $today)
+            ->first();
+        
+        $attendance_id = $attendance -> id;
+
+        // 休憩開始情報を新規登録
+        BreakTime::create([
+            'user_id' => $userId,
+            'attendance_id' => $attendance_id,
+            'break_start' => $now->format('H:i:s'),
+        ]);
+
+        // 状態を保存 
+        $attendance->status = 'break';  
+        $attendance->save();
+
+        return back();
+    }
+
+    // 休憩終了登録
+    public function breakEnd(Request $request)
+    {
+        // 現在ログインしているユーザーID
+        $userId = Auth::id();
+
+        // 今日の日付と現在時刻
+        $now = Carbon::now();
+        $today = $now->toDateString();
+
+        // 今日の出勤記録を取得
+        $attendance = Attendance::where('user_id', $userId)
+            ->whereDate('work_date', $today)
+            ->first();
+
+        // 今日の休憩記録を取得     
+        $break_time = $attendance?->breaks()->latest()->first();
+
+        // 休憩情報を登録
+        $break_time->break_end = $now->format('H:i:s');
+        $attendance->status = 'working';
+
+        // 休憩時間を計算
+        $start = Carbon::parse($break_time->break_start);
+        $end = Carbon::parse($break_time->break_end);
+
+        // 秒差
+        $seconds = $start->diffInSeconds($end);
+
+        // 時・分・秒に分解
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $secs = $seconds % 60;
+
+        // HH:MM:SS に整形
+        $break_time->break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
+
+        // トータル時間を更新
+        $break_time->break_seconds = $seconds;
+
+        // 休憩を保存   
+        $break_time->save();
+
+        $totalBreakSeconds = $attendance->breaks->sum('break_seconds');
+
+        // 時・分・秒に分解
+        $total_hours = floor($totalBreakSeconds / 3600);
+        $total_minutes = floor(($totalBreakSeconds % 3600) / 60);
+        $total_secs = $totalBreakSeconds % 60;
+
+        $attendance->total_break = sprintf('%02d:%02d:%02d', $total_hours, $total_minutes, $total_secs);
+
+        // 出席を保存
+        $attendance->save(); 
+
+        return back();
+    }
+    
 
     // 勤怠一覧の表示
     public function show_list(Request $request)
@@ -135,7 +246,8 @@ class AttendanceController extends Controller
         $nextMonth = $current->copy()->addMonth()->format('Y-m');
 
         // 指定した月で取得
-        $attendances = Attendance::where('user_id', $userId)
+        $attendances = Attendance::with('breaks')
+            ->where('user_id', $userId)
             ->whereYear('work_date', $current->year)
             ->whereMonth('work_date', $current->month)
             ->get();
