@@ -26,6 +26,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'adminShowDetail'])->name('admin.detail');
         Route::post('/attendance/detail/correction', [AdminAttendanceController::class, 'adminDetailCorrection'])->name('admin.detail.correction');
         Route::get('/staff/list', [AdminAttendanceController::class, 'showStaffList']);
+        Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'showAttendanceStaffList'])->name('admin.attendance_staff_list');
+        Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminAttendanceController::class, 'approveCorrectRequest'])->name('admin.approve_correct_request');
+        Route::post('/stamp_correction_request/approve/exec', [AdminAttendanceController::class, 'approveCorrectRequestExec'])->name('admin.approve_correct_request_exec');
     });
 });
 
@@ -43,6 +46,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // 管理者、一般ユーザー両方からアクセス
-Route::middleware(['auth:web,admin'])->group(function () {
-    Route::get('/stamp_correction_request/list', [AttendanceController::class, 'show_stamp_list'])->name('stamp_list');
+Route::middleware('auth.web_or_admin')->group(function () {
+    Route::get('/stamp_correction_request/list', [AttendanceController::class, 'showStampList'])->name('stamp_list');
 });

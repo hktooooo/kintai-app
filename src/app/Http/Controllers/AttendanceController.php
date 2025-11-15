@@ -255,42 +255,15 @@ class AttendanceController extends Controller
         return view('attendance_list', compact('attendances', 'dates', 'current', 'prevMonth', 'nextMonth'));
     }
 
-    // 申請一覧画面の表示
-    public function show_stamp_list(Request $request)
-    {
-        // 現在ログインしているユーザーID
-        $userId = Auth::id();
-        
-        $tab = $request->query('tab');
-        $tab = empty($tab) ? 'pending' : $tab;    // tabが空の場合は 'recommend'
-
-        if ($tab === 'pending') {
-            // 承認待ち
-            $corrections = AttendanceCorrection::with(['user', 'attendance'])
-                ->where('user_id', $userId)
-                ->where('approval_status', 'pending')
-                ->orderBy('requested_date', 'desc') // 降順
-                ->get();
-        } else {
-            // 承認済み
-            $corrections = AttendanceCorrection::with(['user', 'attendance'])
-                ->where('user_id', $userId)
-                ->where('approval_status', 'approved')
-                ->orderBy('requested_date', 'desc') // 降順
-                ->get();
-        }
-
-        return view('stamp_correction_request_list', compact('corrections', 'tab'));  
-    }
-
     // 勤怠詳細画面の表示
     public function showDetail($id)
     {
         // 勤怠データを1件取得
         $attendance = Attendance::with(['user', 'corrections'])->findOrFail($id);
+        $break_times = BreakTime::where('attendance_id', $id)->get();
 
         // 詳細ページに渡す
-        return view('attendance_detail', compact('attendance'));
+        return view('attendance_detail', compact('attendance', 'break_times'));
     }
 
     // 勤怠詳細画面から修正を申請
@@ -331,5 +304,34 @@ class AttendanceController extends Controller
         $attendance->save();
 
         return redirect()->back();
+    }
+
+    // 申請一覧画面の表示
+    public function showStampList(Request $request)
+    {
+        $tab = $request->query('tab', 'pending');
+
+        // 共通クエリを読み込み
+        $query = AttendanceCorrection::with(['user', 'attendance']);
+
+        // 権限で分岐
+        if (Auth::guard('admin')->check()) {
+            // 管理者は絞り込みなし（全件）
+        } else {
+            // 一般ユーザーは自分のデータのみ
+            $query->where('user_id', Auth::id());
+        }
+        
+        // 承認ステータスで共通分岐
+        if ($tab === 'pending') {
+            $query->where('approval_status', 'pending');
+        } else {
+            $query->where('approval_status', 'approved');
+        }
+
+        // 共通の並び順
+        $corrections = $query->orderBy('requested_date', 'desc')->get();
+
+        return view('stamp_correction_request_list', compact('corrections', 'tab'));
     }
 }

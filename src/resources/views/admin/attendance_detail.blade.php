@@ -22,12 +22,28 @@
             </tr>
             <tr>
                 <th>出勤・退勤</th>
-                <td><input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in }}">～<input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out }}" ></td>
+                <td>
+                    <input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in }}">
+                    ～
+                    <input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out }}" >
+                </td>
             </tr>
-            <tr>
-                <th>休憩</th>
-                <td><input type="text" value="">～<input value=""></td>
-            </tr>
+            @foreach ($break_times as $break_time)
+                <tr>
+                    <th>
+                        休憩
+                        @if ($loop->iteration > 1)
+                            {{ $loop->iteration }}
+                        @endif
+                    </th>
+                    <td>
+                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}">
+                        <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start }}">
+                        ～
+                        <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end }}">
+                    </td>
+                </tr>
+            @endforeach
             <tr>
                 <th>備考</th>
                 <td><input type="text" name="reason" id="reason" value="{{ $attendance->reason }}"></td>

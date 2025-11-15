@@ -33,13 +33,13 @@
             @foreach ($attendances as $attendance)
                 <tr>
                     <td>{{ $attendance->user->name ?? '不明' }}</td>
-                    <td>{{ $attendance->clock_in }}</td>
-                    <td>{{ $attendance->clock_out }}</td>
-                    <td>休憩時間</td>
-                    <td>{{ $attendance->working_hours }}</td>
+                    <td>{{ \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($attendance->total_break)->format('H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($attendance->working_hours)->format('H:i') }}</td>
                     <td>
                         <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}">
-                            詳細 {{ $attendance->id }}
+                            詳細
                         </a>
                     </td>
                 </tr>
