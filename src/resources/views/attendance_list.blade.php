@@ -1,22 +1,21 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/auth/attendance_list.css')}}">
+<link rel="stylesheet" href="{{ asset('css/attendance_list.css')}}">
 @endsection
 
 @section('content')
-<div class="">
-    <h1>勤怠一覧</h1>
+<div class="attendance__list__content">
+    <h1 class="attendance__list__header">勤怠一覧</h1>
 
-    <h2>{{ $current->format('Y年n月') }} の日付一覧</h2>
+    <div class="attendance__list__month-select-box">
+        <a class="attendance__list__prev-next-month" href="{{ url('/attendance/list?month=' . $prevMonth) }}">← 前月</a>
+        <p class="attendance__list__this-month">{{ $current->format('Y/n') }}</p> 
+        <a class="attendance__list__prev-next-month" href="{{ url('/attendance/list?month=' . $nextMonth) }}">翌月 →</a>
+    </div>
 
-    <p>
-        <a href="{{ url('/attendance/list?month=' . $prevMonth) }}">← 前月</a> |
-        <a href="{{ url('/attendance/list?month=' . $nextMonth) }}">翌月 →</a>
-    </p>
-
-    <table>
-        <tr>
+    <table class="attendance__list__table">
+        <tr class="attendance__list__table__row">
             <th>日付</th>
             <th>出勤</th>
             <th>退勤</th>
@@ -33,7 +32,7 @@
                 // その日の勤怠データを探す
                 $attendanceForDate = $attendances->firstWhere('work_date', $date->toDateString());
             @endphp
-            <tr>
+            <tr class="attendance__list__table__row">
                 <td>
                     {{ $formatted }}
                 </td>

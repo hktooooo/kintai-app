@@ -1,0 +1,122 @@
+body {
+    background-color: #F0EFF2;
+}
+
+
+.attendance__list__content {
+    width: 916px;
+    margin: 0 auto;
+    padding-top: 91px;
+    padding-bottom: 114px;
+    height: auto;
+    border: red solid 1px;
+}
+
+.attendance__list__header {
+    border-left: #000 solid 8px;
+    padding-left: 17px;
+    height: 40px;
+    color: #000;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+.attendance__list__month-select-box {
+    width: 900px;
+    margin: 43px auto 0 auto;
+    border-radius: 10px;
+    background-color: #FFF;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+}
+
+.attendance__list__prev-next-month {
+    display: block;
+    width: auto;
+    border: red 1px solid;
+    color: #737373;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.attendance__list__this-month {
+    border: blue 1px solid;
+    color: #000;
+    width: 123px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.attendance__list__table {
+    width: 900px;
+    margin: 46px auto 0 auto;
+    background-color: #FFF;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #737373;
+}
+
+.attendance__list__table__row {
+    height: 47px;
+}
+
+
+.attendance__clock-section {
+    margin: 32px auto 0 auto;
+}
+
+.attendance__clock-section__date {
+    font-size: 40px;
+    font-weight: 400px;
+    color: #000;
+}
+
+.attendance__clock-section__time {
+    margin-top: 35px;
+    font-size: 80px;
+    font-weight: 700;
+}
+
+.attendance__button-box {
+    margin-top: 76px;
+}
+
+.attendance__button__clockIn,
+.attendance__button__clockOut {
+    background-color: #000;
+    color: #fff;
+}
+
+.attendance__button__breakStart,
+.attendance__button__breakEnd {
+    background-color: #fff;
+    color: #000;
+}
+
+.attendance__button-box__working {
+    display: flex;
+    justify-content: space-between;
+    width: 524px;
+    margin: 0 auto;
+}
+
+.attendance__button-box__text {
+    margin: 28px auto 0 auto;
+    width: 332px;
+    padding-left: 24px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.15em;
+}
