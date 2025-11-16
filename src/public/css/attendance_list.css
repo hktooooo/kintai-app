@@ -2,6 +2,11 @@ body {
     background-color: #F0EFF2;
 }
 
+.attendance__list__content__wrapper {
+    background-color: #F0EFF2;
+    min-height: 100vh;
+    /* 画面全体をカバー */
+}
 
 .attendance__list__content {
     width: 916px;
@@ -9,7 +14,6 @@ body {
     padding-top: 91px;
     padding-bottom: 114px;
     height: auto;
-    border: red solid 1px;
 }
 
 .attendance__list__header {
@@ -31,7 +35,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 25px;
+    padding: 0 18px;
 }
 
 .attendance__list__prev-next-month {
@@ -42,17 +46,46 @@ body {
     font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.15em;
+    height: 60px;
+    line-height: 60px;
+}
+
+.attendance__list__prev-next-month img {
+    width: 20px;
+    height: auto;
+    margin: 0 7px;
+}
+
+.attendance__list__prev-next-month span {
+    line-height: 55px;
+}
+
+.attendance__list__this-month-calendar {
+    display: flex;
+    width: 123px;
+    justify-content: space-between;
+    align-items: center;
+    border: green 1px solid;
+}
+
+.attendance__list__this-month-calendar img {
+    width: 25px;
+    height: auto;
 }
 
 .attendance__list__this-month {
     border: blue 1px solid;
     color: #000;
-    width: 123px;
     height: 60px;
     line-height: 60px;
     font-size: 20px;
     font-weight: 700;
     text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
 }
 
 .attendance__list__table {
@@ -67,56 +100,34 @@ body {
     color: #737373;
 }
 
-.attendance__list__table__row {
+.attendance__list__row th {
     height: 47px;
+    border-bottom: 3px solid #E1E1E1;
 }
 
-
-.attendance__clock-section {
-    margin: 32px auto 0 auto;
+.attendance__list__row th:first-child {
+    padding-right: 48px;
 }
 
-.attendance__clock-section__date {
-    font-size: 40px;
-    font-weight: 400px;
+.attendance__list__row th:last-child {
+    padding-left: 4px;
+}
+
+.attendance__list__row td {
+    height: 47px;
+    border-bottom: 2px solid #E1E1E1;
+    border-left: none;
+    border-right: none;
+}
+
+.attendance__list__row:last-child td {
+    border-bottom: none;
+}
+
+.attendance__list__data a {
     color: #000;
 }
 
-.attendance__clock-section__time {
-    margin-top: 35px;
-    font-size: 80px;
-    font-weight: 700;
-}
-
-.attendance__button-box {
-    margin-top: 76px;
-}
-
-.attendance__button__clockIn,
-.attendance__button__clockOut {
-    background-color: #000;
-    color: #fff;
-}
-
-.attendance__button__breakStart,
-.attendance__button__breakEnd {
-    background-color: #fff;
+.attendance__list__data button {
     color: #000;
-}
-
-.attendance__button-box__working {
-    display: flex;
-    justify-content: space-between;
-    width: 524px;
-    margin: 0 auto;
-}
-
-.attendance__button-box__text {
-    margin: 28px auto 0 auto;
-    width: 332px;
-    padding-left: 24px;
-    font-size: 26px;
-    font-weight: 700;
-    color: #000;
-    letter-spacing: 0.15em;
 }
