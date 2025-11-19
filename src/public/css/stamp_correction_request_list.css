@@ -2,12 +2,6 @@ body {
     background-color: #F0EFF2;
 }
 
-.stamp__list__content__wrapper {
-    background-color: #F0EFF2;
-    min-height: 100vh;
-    /* 画面全体をカバー */
-}
-
 .stamp__list__content {
     width: 916px;
     margin: 0 auto;

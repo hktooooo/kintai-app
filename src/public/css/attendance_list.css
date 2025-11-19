@@ -2,12 +2,6 @@ body {
     background-color: #F0EFF2;
 }
 
-.attendance__list__content__wrapper {
-    background-color: #F0EFF2;
-    min-height: 100vh;
-    /* 画面全体をカバー */
-}
-
 .attendance__list__content {
     width: 916px;
     margin: 0 auto;
@@ -42,7 +36,6 @@ body {
     display: inline-flex;
     align-items: center;
     width: auto;
-    border: red 1px solid;
     color: #737373;
     font-size: 16px;
     font-weight: 700;
@@ -58,10 +51,10 @@ body {
 }
 
 .attendance__list__prev-next-month span {
-    border: #000 solid 1px;
     height: 30px;
     line-height: 28px;
     display: inline-block;
+    text-align: center;
 }
 
 .attendance__list__this-month-calendar {
@@ -69,7 +62,6 @@ body {
     width: 123px;
     justify-content: space-between;
     align-items: center;
-    border: green 1px solid;
 }
 
 .attendance__list__this-month-calendar img {
@@ -78,7 +70,6 @@ body {
 }
 
 .attendance__list__this-month {
-    border: blue 1px solid;
     color: #000;
     height: 60px;
     line-height: 60px;
@@ -109,10 +100,6 @@ table {
     border-bottom: 3px solid #E1E1E1;
 }
 
-.attendance__list__row th:first-child {
-    padding-right: 48px;
-}
-
 .attendance__list__row th:last-child {
     padding-left: 4px;
 }
@@ -134,4 +121,35 @@ table {
 
 .attendance__list__data button {
     color: #000;
+}
+
+.attendance__list__row th:first-child,
+.attendance__list__row td:first-child {
+    text-align: left;
+    width: 203px;
+}
+
+.attendance__list__row th:first-child {
+    padding-left: 57px;
+}
+
+.attendance__list__row td:first-child {
+    padding-left: 55px;
+}
+
+.attendance__list__row th:nth-child(2),
+.attendance__list__row td:nth-child(2),
+.attendance__list__row th:nth-child(3),
+.attendance__list__row td:nth-child(3),
+.attendance__list__row th:nth-child(4),
+.attendance__list__row td:nth-child(4),
+.attendance__list__row th:nth-child(5),
+.attendance__list__row td:nth-child(5) {
+    width: 136px;
+}
+
+.attendance__list__row th:last-child,
+.attendance__list__row td:last-child {
+    text-align: left;
+    padding-left: 36px;
 }

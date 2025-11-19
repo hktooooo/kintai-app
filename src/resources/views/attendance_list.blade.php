@@ -34,27 +34,24 @@
                     $formatted = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
 
                     // その日の勤怠データを探す
-                    $attendanceForDate = $attendances->firstWhere('work_date', $date->toDateString());
+                    $attendanceForDate = $attendancesByDate[$date->toDateString()] ?? null;
                 @endphp
+
                 <tr class="attendance__list__row">
                     <td class="attendance__list__data">
                         {{ $formatted }}
                     </td>
                     <td class="attendance__list__data">
-                        {{ $attendanceForDate && $attendanceForDate->clock_in
-                            ? \Carbon\Carbon::parse($attendanceForDate->clock_in)->format('H:i')
-                            : ' ' }}
+                        {{ $attendanceForDate && $attendanceForDate->clock_in ? \Carbon\Carbon::parse($attendanceForDate->clock_in)->format('H:i') : '' }}
                     </td>
                     <td class="attendance__list__data">
-                        {{ $attendanceForDate && $attendanceForDate->clock_out
-                            ? \Carbon\Carbon::parse($attendanceForDate->clock_out)->format('H:i')
-                            : ' ' }}
+                        {{ $attendanceForDate && $attendanceForDate->clock_out ? \Carbon\Carbon::parse($attendanceForDate->clock_out)->format('H:i') : '' }}
                     </td class="attendance__list__data">
                     <td class="attendance__list__data">
-                        {{ $attendanceForDate && $attendanceForDate->total_break ? \Carbon\Carbon::parse($attendanceForDate->total_break)->format('H:i') : ' ' }}
+                        {{ $attendanceForDate && $attendanceForDate->total_break ? \Carbon\Carbon::parse($attendanceForDate->total_break)->format('H:i') : '' }}
                     </td>
                     <td class="attendance__list__data">
-                        {{ $attendanceForDate ? \Carbon\Carbon::parse($attendanceForDate->working_hours)->format('H:i') : ' ' }}
+                        {{ $attendanceForDate && $attendanceForDate->working_hours ? \Carbon\Carbon::parse($attendanceForDate->working_hours)->format('H:i') : '' }}
                     </td>
                     <td class="attendance__list__data">
                         @if ($attendanceForDate)
