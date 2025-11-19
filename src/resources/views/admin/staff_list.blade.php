@@ -5,30 +5,44 @@
 @endsection
 
 @section('content')
-<div class="">
-    <h1>スタッフ一覧</h1>
+<div class="staff__list__content__wrapper">
+    <div class="staff__list__content">
+        <h1 class="staff__list__header">スタッフ一覧</h1>
 
-    <table>
-        <tr>
-            <th>名前</th>
-            <th>メールアドレス</th>
-            <th>月次勤怠</th>
-        </tr>
-        @foreach ($users as $user)
-            <tr>
-                <td>
-                    {{ $user -> name }}
-                </td>
-                <td>
-                    {{ $user -> email }}
-                </td>
-                <td>
-                    <a href="{{ route('admin.attendance_staff_list', ['id' => $user->id]) }}">
-                        詳細
-                    </a>
-                </td>
+        <table class="staff__list__table">
+            <tr class="staff__list__row">
+                <th class="staff__list__label">
+                    <p class="staff__list__label__name">
+                        名前
+                    </p>
+                </th>
+                <th class="staff__list__label">メールアドレス</th>
+                <th class="staff__list__label">
+                    <p class="staff__list__label__link">
+                        月次勤怠
+                    </p>
+                </th>
             </tr>
-        @endforeach
-    </table>
+            @foreach ($users as $user)
+                <tr class="staff__list__row">
+                    <td class="staff__list__data">
+                        <p class="staff__list__data__name">
+                            {{ $user -> name }}
+                        </p>
+                    </td>
+                    <td class="staff__list__data">
+                        {{ $user -> email }}
+                    </td>
+                    <td class="staff__list__data">
+                        <div class="staff__list__data__link">
+                            <a href="{{ route('admin.attendance_staff_list', ['id' => $user->id]) }}">
+                                詳細
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
 </div>
 @endsection

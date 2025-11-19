@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class BreakTime extends Model
 {
@@ -20,5 +21,25 @@ class BreakTime extends Model
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
+    }
+
+    // 日付キャスト
+    protected $casts = [
+        'break_start' => 'datetime',
+        'break_end' => 'datetime',
+    ];
+
+    public function getBreakStartFormattedAttribute()
+    {
+        return $this->break_start
+            ? $this->break_start->format('H:i')
+            : null;
+    }
+
+    public function getBreakEndFormattedAttribute()
+    {
+        return $this->break_end
+            ? $this->break_end->format('H:i')
+            : null;
     }
 }

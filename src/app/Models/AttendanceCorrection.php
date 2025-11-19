@@ -26,4 +26,17 @@ class AttendanceCorrection extends Model
     {
         return $this->belongsTo(Attendance::class);
     }
+
+    // 日付キャスト
+    protected $casts = [
+        'requested_date' => 'datetime',
+    ];
+
+    // アクセサ（Y/m/d に整形）
+    public function getRequestedDateFormattedAttribute()
+    {
+        return $this->requested_date
+            ? $this->requested_date->format('Y/m/d')
+            : null;
+    }
 }

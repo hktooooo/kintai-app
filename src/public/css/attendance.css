@@ -1,0 +1,82 @@
+body {
+    background-color: #F0EFF2;
+}
+
+.btn {
+    width: 221px;
+    height: 77px;
+    line-height: 73px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    border-radius: 20px;
+    letter-spacing: 0.15em;
+}
+
+.attendance__content {
+    text-align: center;
+    padding-top: 209px;
+    min-height: 902px;
+}
+
+.attendance__status-box {
+    width: 100px;
+    margin: 0 auto;
+    border-radius: 40px;
+    background-color: #C8C8C8;
+    color: #696969;
+    font-size: 18px;
+    font-weight: 700;
+    height: 40px;
+    line-height: 37px;
+    letter-spacing: 0.15em;
+}
+
+.attendance__clock-section {
+    margin: 32px auto 0 auto;
+}
+
+.attendance__clock-section__date {
+    font-size: 40px;
+    font-weight: 400px;
+    color: #000;
+}
+
+.attendance__clock-section__time {
+    margin-top: 35px;
+    font-size: 80px;
+    font-weight: 700;
+}
+
+.attendance__button-box {
+    margin-top: 76px;
+}
+
+.attendance__button__clockIn,
+.attendance__button__clockOut {
+    background-color: #000;
+    color: #fff;
+}
+
+.attendance__button__breakStart,
+.attendance__button__breakEnd {
+    background-color: #fff;
+    color: #000;
+}
+
+.attendance__button-box__working {
+    display: flex;
+    justify-content: space-between;
+    width: 524px;
+    margin: 0 auto;
+}
+
+.attendance__button-box__text {
+    margin: 28px auto 0 auto;
+    width: 332px;
+    padding-left: 24px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.15em;
+}

@@ -219,7 +219,6 @@ class AttendanceController extends Controller
         return back();
     }
     
-
     // 勤怠一覧の表示
     public function show_list(Request $request)
     {
@@ -252,7 +251,16 @@ class AttendanceController extends Controller
             ->whereMonth('work_date', $current->month)
             ->get();
 
-        return view('attendance_list', compact('attendances', 'dates', 'current', 'prevMonth', 'nextMonth'));
+        $attendancesByDate = [];
+
+        foreach ($dates as $date) {
+            $attendanceForDate = $attendances->first(function ($att) use ($date) {
+                return Carbon::parse($att->work_date)->isSameDay($date);
+            });
+            $attendancesByDate[$date->toDateString()] = $attendanceForDate;
+        }
+
+        return view('attendance_list', compact('attendancesByDate', 'dates', 'current', 'prevMonth', 'nextMonth'));
     }
 
     // 勤怠詳細画面の表示

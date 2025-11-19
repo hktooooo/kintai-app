@@ -1,0 +1,117 @@
+body {
+    background-color: #F0EFF2;
+}
+
+.stamp__list__content {
+    width: 916px;
+    margin: 0 auto;
+    padding-top: 126px;
+    padding-bottom: 325px;
+    height: auto;
+}
+
+.stamp__list__header {
+    border-left: #000 solid 8px;
+    padding-left: 17px;
+    height: 40px;
+    color: #000;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+.stamp__list__link-box {
+    margin-top: 61px;
+    padding-left: 49px;
+    width: 100%;
+    height: 36px;
+    border-bottom: 1px solid #000;
+}
+
+.stamp__list__link-box a {
+    font-size: 16px;
+    color: #000;
+    font-weight: 400;
+}
+
+.stamp__list__link-box a.is-active {
+    font-weight: 700;
+}
+
+.stamp__list__link-box a:last-child {
+    margin-left: 106px;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+}
+
+.stamp__list__table {
+    width: 900px;
+    margin: 45px auto 0 auto;
+    background-color: #FFF;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #737373;
+}
+
+.stamp__list__row th {
+    height: 46px;
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.stamp__list__row td {
+    height: 46px;
+    border-bottom: 2px solid #E1E1E1;
+    border-left: none;
+    border-right: none;
+}
+
+.stamp__list__row:last-child td {
+    border-bottom: none;
+}
+
+.stamp__list__data a {
+    color: #000;
+    text-align: center;
+}
+
+.stamp__list__label:first-child,
+.stamp__list__data:first-child {
+    width: 140px;
+}
+
+.stamp__list__label:nth-child(2),
+.stamp__list__data:nth-child(2) {
+    width: 140px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.stamp__list__label:nth-child(3),
+.stamp__list__data:nth-child(3) {
+    width: 160px;
+    text-align: left;
+}
+
+.stamp__list__label:nth-child(4),
+.stamp__list__data:nth-child(4) {
+    width: auto;
+    text-align: left;
+}
+
+.stamp__list__label:nth-child(5),
+.stamp__list__data:nth-child(5) {
+    width: 160px;
+    text-align: left;
+}
+
+.stamp__list__label:last-child,
+.stamp__list__data:last-child {
+    width: 122px;
+    text-align: left;
+}

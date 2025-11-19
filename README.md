@@ -104,7 +104,7 @@ name: 一般ユーザ
 email: test@test.com  
 password: 12345678  
 -------------------------
-name: 一般ユーザ  
+name: 管理者
 email: admin@test.com  
 password: 12345678  
 -------------------------

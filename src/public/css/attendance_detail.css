@@ -1,0 +1,138 @@
+body {
+    background-color: #F0EFF2;
+}
+
+.btn {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    border-radius: 5px;
+    letter-spacing: 0.15em;
+}
+
+.attendance__detail__content {
+    width: 916px;
+    margin: 0 auto;
+    padding-top: 93px;
+    padding-bottom: 163px;
+    height: auto;
+}
+
+.attendance__detail__header {
+    border-left: #000 solid 8px;
+    padding-left: 17px;
+    height: 40px;
+    color: #000;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+}
+
+.attendance__detail__table {
+    width: 900px;
+    margin: 51px auto 0 auto;
+    background-color: #FFF;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #737373;
+}
+
+.attendance__detail__row th {
+    width: 328px;
+    height: 90px;
+    padding-left: 64px;
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.attendance__detail__row td {
+    height: 90px;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid #E1E1E1;
+    color: #000;
+}
+
+.attendance__detail__row:last-child th,
+.attendance__detail__row:last-child td {
+    border-bottom: none;
+    height: 106px;
+}
+
+.detail__time input {
+    width: 103px;
+    height: 28px;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    color: #000;
+    display: block;
+    text-align: center;
+    letter-spacing: 0.15em;
+    font-size: 16px;
+    line-height: normal;
+    padding-top: 0;
+    padding-bottom: 2px;
+}
+
+.detail__name,
+.detail__date {
+    padding-left: 24px;
+}
+
+.detail__time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 316px;
+}
+
+.detail__reason textarea {
+    width: 316px;
+    height: 72px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    color: #000;
+    text-align: left;
+    padding-left: 13px;
+    padding-top: 4px;
+    letter-spacing: 0.15em;
+    resize: none;
+    font-size: 16px;
+}
+
+.attendance__detail__data__year {
+    margin-right: 136px;
+}
+
+.attendance__detail__status {
+    margin-top: 14px;
+    text-align: right;
+}
+
+.attendance__detail__status__pending {
+    color: rgba(255, 0, 0, 0.5);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.attendance__detail__status__submit {
+    margin-top: 22px;
+    margin-right: 8px;
+    width: 130px;
+    height: 50px;
+    line-height: 48px;
+    color: #FFF;
+    background-color: #000;
+}
+
+.detail__time input:disabled,
+.detail__reason textarea:disabled {
+    border: none;
+}
