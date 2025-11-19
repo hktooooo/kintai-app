@@ -1,0 +1,91 @@
+body {
+    background-color: #F0EFF2;
+}
+
+.staff__list__content__wrapper {
+    background-color: #F0EFF2;
+    min-height: 100vh;
+    /* 画面全体をカバー */
+}
+
+.staff__list__content {
+    width: 916px;
+    margin: 0 auto;
+    padding-top: 126px;
+    padding-bottom: 325px;
+    height: auto;
+}
+
+.staff__list__header {
+    border-left: #000 solid 8px;
+    padding-left: 17px;
+    height: 40px;
+    color: #000;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+}
+
+.staff__list__table {
+    width: 900px;
+    margin: 94px auto 0 auto;
+    background-color: #FFF;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #737373;
+}
+
+.staff__list__row th {
+    height: 46px;
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.staff__list__row td {
+    height: 46px;
+    border-bottom: 2px solid #E1E1E1;
+    border-left: none;
+    border-right: none;
+}
+
+.staff__list__row:last-child td {
+    border-bottom: none;
+}
+
+.staff__list__data a {
+    color: #000;
+    text-align: center;
+}
+
+.staff__list__label:first-child,
+.staff__list__data:first-child {
+    width: 271px;
+    text-align: right;
+}
+
+.staff__list__label__name,
+.staff__list__data__name {
+    min-width: 100px;
+    display: inline-block;
+    text-align: center;
+}
+
+.staff__list__label:last-child,
+.staff__list__data:last-child {
+    width: 208px;
+    text-align: left;
+}
+
+.staff__list__label__link,
+.staff__list__data__link {
+    width: 77px;
+    display: block;
+    text-align: center;
+}
