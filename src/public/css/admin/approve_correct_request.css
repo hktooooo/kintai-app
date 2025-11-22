@@ -10,7 +10,7 @@ body {
     letter-spacing: 0.15em;
 }
 
-.attendance__detail__content {
+.approve__content {
     width: 916px;
     margin: 0 auto;
     padding-top: 93px;
@@ -18,7 +18,7 @@ body {
     height: auto;
 }
 
-.attendance__detail__header {
+.approve__header {
     border-left: #000 solid 8px;
     padding-left: 17px;
     height: 40px;
@@ -33,7 +33,7 @@ table {
     border: none;
 }
 
-.attendance__detail__table {
+.approve__table {
     width: 900px;
     margin: 51px auto 0 auto;
     background-color: #FFF;
@@ -45,14 +45,14 @@ table {
     color: #737373;
 }
 
-.attendance__detail__row th {
+.approve__row th {
     width: 328px;
     height: 90px;
     padding-left: 64px;
     border-bottom: 2px solid #E1E1E1;
 }
 
-.attendance__detail__row td {
+.approve__row td {
     height: 90px;
     border-left: none;
     border-right: none;
@@ -60,8 +60,8 @@ table {
     color: #000;
 }
 
-.attendance__detail__row:last-child th,
-.attendance__detail__row:last-child td {
+.approve__row:last-child th,
+.approve__row:last-child td {
     border-bottom: none;
     height: 106px;
 }
@@ -107,29 +107,8 @@ table {
     font-size: 16px;
 }
 
-.attendance__detail__data__year {
+.approve__data__year {
     margin-right: 136px;
-}
-
-.attendance__detail__status {
-    margin-top: 14px;
-    text-align: right;
-}
-
-.attendance__detail__status__pending {
-    color: rgba(255, 0, 0, 0.5);
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.attendance__detail__status__submit {
-    margin-top: 22px;
-    margin-right: 8px;
-    width: 130px;
-    height: 50px;
-    line-height: 48px;
-    color: #FFF;
-    background-color: #000;
 }
 
 .detail__time input:disabled,
@@ -139,4 +118,31 @@ table {
 
 .detail__name span {
     margin-left: 18px;
+}
+
+.approve__exec__btn-box {
+    margin-top: 56px;
+    text-align: right;
+}
+
+.approve__exec {
+    margin-right: 8px;
+    background-color: #000;
+    color: #FFF;
+    width: 130px;
+    height: 50px;
+    display: inline-block;
+    padding-bottom: 4px;
+    box-sizing: border-box;
+}
+
+.approve__executed {
+    margin-right: 8px;
+    background-color: #696969;
+    color: #FFF;
+    width: 130px;
+    height: 50px;
+    display: inline-block;
+    line-height: 47px;
+    box-sizing: border-box;
 }

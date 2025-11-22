@@ -2,6 +2,14 @@ body {
     background-color: #F0EFF2;
 }
 
+.btn {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    border-radius: 5px;
+    letter-spacing: 0.15em;
+}
+
 .attendance__list__content {
     width: 916px;
     margin: 0 auto;
@@ -20,7 +28,7 @@ body {
     line-height: 36px;
 }
 
-.attendance__list__day-select-box {
+.attendance__list__month-select-box {
     width: 900px;
     margin: 43px auto 0 auto;
     border-radius: 10px;
@@ -32,7 +40,7 @@ body {
     padding: 0 18px;
 }
 
-.attendance__list__prev-next-day {
+.attendance__list__prev-next-month {
     display: inline-flex;
     align-items: center;
     width: auto;
@@ -44,31 +52,32 @@ body {
     line-height: 30px;
 }
 
-.attendance__list__prev-next-day img {
+.attendance__list__prev-next-month img {
     width: 20px;
     height: auto;
     margin: 0 7px;
 }
 
-.attendance__list__prev-next-day span {
+.attendance__list__prev-next-month span {
     height: 30px;
     line-height: 28px;
     display: inline-block;
+    text-align: center;
 }
 
-.attendance__list__this-day-calendar {
+.attendance__list__this-month-calendar {
     display: flex;
-    width: 155px;
+    width: 123px;
     justify-content: space-between;
     align-items: center;
 }
 
-.attendance__list__this-day-calendar img {
+.attendance__list__this-month-calendar img {
     width: 25px;
     height: auto;
 }
 
-.attendance__list__this-day {
+.attendance__list__this-month {
     color: #000;
     height: 60px;
     line-height: 60px;
@@ -124,9 +133,16 @@ table {
 
 .attendance__list__row th:first-child,
 .attendance__list__row td:first-child {
-    text-align: center;
-    width: 175px;
-    padding-right: 25px;
+    text-align: left;
+    width: 203px;
+}
+
+.attendance__list__row th:first-child {
+    padding-left: 57px;
+}
+
+.attendance__list__row td:first-child {
+    padding-left: 55px;
 }
 
 .attendance__list__row th:nth-child(2),
@@ -137,11 +153,27 @@ table {
 .attendance__list__row td:nth-child(4),
 .attendance__list__row th:nth-child(5),
 .attendance__list__row td:nth-child(5) {
-    width: 138px;
+    width: 136px;
 }
 
 .attendance__list__row th:last-child,
 .attendance__list__row td:last-child {
     text-align: left;
-    padding-left: 42px;
+    padding-left: 36px;
+}
+
+.attendance__staff__list__output-box {
+    margin-top: 60px;
+    text-align: right;
+    padding-right: 8px;
+}
+
+.attendance__staff__list__output {
+    background-color: #000;
+    color: #FFF;
+    width: 184px;
+    height: 50px;
+    display: inline-block;
+    padding-bottom: 4px;
+    box-sizing: border-box;
 }

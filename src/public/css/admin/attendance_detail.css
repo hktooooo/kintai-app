@@ -112,29 +112,19 @@ table {
 }
 
 .attendance__detail__status {
-    margin-top: 14px;
+    margin-top: 56px;
     text-align: right;
 }
 
-.attendance__detail__status__pending {
-    color: rgba(255, 0, 0, 0.5);
-    font-size: 18px;
-    font-weight: 800;
-}
-
 .attendance__detail__status__submit {
-    margin-top: 22px;
     margin-right: 8px;
     width: 130px;
     height: 50px;
-    line-height: 48px;
     color: #FFF;
     background-color: #000;
-}
-
-.detail__time input:disabled,
-.detail__reason textarea:disabled {
-    border: none;
+    display: inline-block;
+    padding-bottom: 4px;
+    box-sizing: border-box;
 }
 
 .detail__name span {

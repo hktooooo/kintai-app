@@ -14,17 +14,16 @@ li {
     list-style: none;
 }
 
-select option {
-    background-color: #636769;
-    color: #EAEAEA;
-    font-size: 12px;
-    font-weight: 600;
+button {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
 }
 
 .header {
     height: 80px;
     background-color: #000;
-    padding: 0px 26px 0px 40px;
+    padding: 0px 46px 0px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,40 +31,14 @@ select option {
 
 .header__heading {
     width: 370px;
-    height: 50px;
+    height: 36px;
     display: block;
 }
 
 .header__heading img {
-    width: 100%;
-    height: 50px;
+    width: auto;
+    height: 36px;
     padding-top: 0;
-}
-
-.search-form {
-    text-align: center;
-    width: 500px;
-}
-
-.search-form__input {
-    width: 500px;
-    height: 50px;
-    background-color: #fff;
-    border-radius: 5px;
-    color: #000;
-    padding-left: 12px;
-    font-size: 24px;
-}
-
-.search-form__input::placeholder {
-    color: #000;
-    font-size: 24px;
-    padding-left: 30px;
-}
-
-.header nav {
-    width: 463px;
-    padding-left: 37px;
 }
 
 .header-nav {
@@ -75,8 +48,12 @@ select option {
     font-size: 24px;
 }
 
-.header-nav__link-logout {
-    color: #fff;
+.header-nav__item {
+    padding-left: 55px;
+}
+
+.header-nav__item:nth-child(2) {
+    padding-left: 43px;
 }
 
 .header-nav__item a {
@@ -87,22 +64,6 @@ select option {
     display: inline;
 }
 
-.header-nav__link-mypage {
+.header-nav__link-logout {
     color: #fff;
-}
-
-.header-nav__item__button {
-    width: 100px;
-    height: 50px;
-    background-color: #fff;
-    border-radius: 4px;
-    text-align: center;
-    line-height: 50px;
-}
-
-.header-nav__item__button a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: #000;
 }
