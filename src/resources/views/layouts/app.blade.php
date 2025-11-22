@@ -13,9 +13,9 @@
 <body>
     <div class="app">
         <header class="header">
-            <a class="header__heading" href="/">
-                <img src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-            </a>
+            <div class="header__heading">
+                <img src="{{ asset('images/logo.png') }}" alt="COACHTECH">
+            </div>
 
             @if(Auth::guard('admin')->check())
                 {{-- 管理者用ナビ --}}

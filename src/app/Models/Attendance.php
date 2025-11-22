@@ -40,6 +40,8 @@ class Attendance extends Model
         'work_date' => 'datetime',
         'clock_in' => 'datetime',
         'clock_out' => 'datetime',
+        'working_hours' => 'datetime',
+        'total_break' => 'datetime',
     ];
 
     // アクセサ（Y/m/d に整形）
@@ -68,6 +70,20 @@ class Attendance extends Model
     {
         return $this->clock_out
             ? $this->clock_out->format('H:i')
+            : null;
+    }
+
+    public function getWorkingHoursFormattedAttribute()
+    {
+        return $this->working_hours
+            ? $this->working_hours->format('H:i')
+            : null;
+    }
+
+    public function getTotalBreakFormattedAttribute()
+    {
+        return $this->total_break
+            ? $this->total_break->format('H:i')
             : null;
     }
 }

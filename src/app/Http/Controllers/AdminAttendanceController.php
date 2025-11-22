@@ -82,7 +82,7 @@ class AdminAttendanceController extends Controller
         return view('admin.staff_list', compact('users'));  
     }
 
-    // スタッフ一覧画面の表示
+    // スタッフ別勤怠一覧画面の表示
     public function showAttendanceStaffList($id, Request $request)
     {
         // $idで受け取ったユーザーID
@@ -117,7 +117,16 @@ class AdminAttendanceController extends Controller
             ->whereMonth('work_date', $current->month)
             ->get();
 
-        return view('admin.attendance_staff_list', compact('user', 'attendances', 'dates', 'current', 'prevMonth', 'nextMonth'));
+        $attendancesByDate = [];
+
+        foreach ($dates as $date) {
+            $attendanceForDate = $attendances->first(function ($att) use ($date) {
+                return Carbon::parse($att->work_date)->isSameDay($date);
+            });
+            $attendancesByDate[$date->toDateString()] = $attendanceForDate;
+        }
+
+        return view('admin.attendance_staff_list', compact('user', 'attendancesByDate', 'dates', 'current', 'prevMonth', 'nextMonth'));
     }
 
     // 修正申請承認画面の表示
