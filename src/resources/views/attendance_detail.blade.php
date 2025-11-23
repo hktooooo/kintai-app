@@ -10,6 +10,8 @@
     @php
         // 最新の修正申請（なければ null）
         $latestCorrection = $attendance->corrections->last();
+        $breakCorrections = $latestCorrection ? $latestCorrection->breakCorrections : collect([]);
+
         // 承認待ちかどうか
         $isPending = $latestCorrection && $latestCorrection->approval_status === 'pending';
         [$last_name, $first_name] = explode(' ', $attendance->user->name);
@@ -18,7 +20,6 @@
 
     <form action="{{ route('submit.detail.correction') }}" method="post">
     @csrf
-        <input type="hidden" name="id" id="id" value="{{ $attendance->id }}">
         <table class="attendance__detail__table">
             <tr class="attendance__detail__row">
                 <th class="attendance__detail__label">名前</th>
@@ -32,43 +33,103 @@
                     <span class="attendance__detail__data__year">{{ $year }}</span>{{ $month_day }}
                 </td>
             </tr>
-            <tr class="attendance__detail__row">
-                <th class="attendance__detail__label">出勤・退勤</th>
-                <td class="attendance__detail__data">
-                    <div class="detail__time">
-                        <input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in_formatted }}" @if($isPending) disabled @endif>
-                        <p>～</p>
-                        <input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out_formatted }}" @if($isPending) disabled @endif>
-                    </div>
-                </td>
-            </tr>
-            @foreach ($break_times as $break_time)
+            {{-- 新規、承認済み --}}
+            @if(!$isPending)
+                <input type="hidden" name="id" id="id" value="{{ $attendance->id }}">
                 <tr class="attendance__detail__row">
-                    <th class="attendance__detail__label">
-                        休憩
-                        @if ($loop->iteration > 1)
-                            {{ $loop->iteration }}
-                        @endif
-                    </th>
+                    <th class="attendance__detail__label">出勤・退勤</th>
                     <td class="attendance__detail__data">
-                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}">
                         <div class="detail__time">
-                            <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_formatted }}" @if($isPending) disabled @endif>
+                            <input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in_formatted }}">
                             <p>～</p>
-                            <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end_formatted }}" @if($isPending) disabled @endif>
+                            <input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out_formatted }}">
                         </div>
                     </td>
                 </tr>
-            @endforeach
-            <tr class="attendance__detail__row">
-                <th class="attendance__detail__label">備考</th>
-                <td class="attendance__detail__data detail__reason">
-                    <textarea name="reason" id="reason" @if($isPending) disabled @endif>{{ $attendance->reason }}</textarea>
-                </td>
-            </tr>
+                @foreach ($break_times as $break_time)
+                    <tr class="attendance__detail__row">
+                        <th class="attendance__detail__label">
+                            休憩
+                            @if ($loop->iteration > 1)
+                                {{ $loop->iteration }}
+                            @endif
+                        </th>
+                        <td class="attendance__detail__data">
+                            <input type="hidden" name="breaks[{{ $break_time->id }}][break_id]" value="{{ $break_time->id }}">
+                            <div class="detail__time">
+                                <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_formatted }}">
+                                <p>～</p>
+                                <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end_formatted }}">
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                {{-- 新規追加用（id を持たないので new） --}}
+                @if(!$isPending)
+                    <tr class="attendance__detail__row">
+                        <th class="attendance__detail__label">
+                            休憩
+                            @if ($break_times->count() >= 1)
+                                {{ $break_times->count() + 1 }}
+                            @endif
+                        </th>
+                        <td class="attendance__detail__data">
+                            <input type="hidden" name="breaks[new][break_id]" value="">
+                            <div class="detail__time">
+                                <input type="text" name="breaks[new][break_start]" value="">
+                                <p>～</p>
+                                <input type="text" name="breaks[new][break_end]" value="">
+                            </div>
+                        </td>
+                    </tr>
+                @endif
+                <tr class="attendance__detail__row">
+                    <th class="attendance__detail__label">備考</th>
+                    <td class="attendance__detail__data detail__reason">
+                        <textarea name="reason" id="reason">{{ old('reason', $attendance->reason) }}</textarea>
+                    </td>
+                </tr>
+            {{-- 承認待ち --}}
+            @else 
+                <tr class="attendance__detail__row">
+                    <th class="attendance__detail__label">出勤・退勤</th>
+                    <td class="attendance__detail__data">
+                        <div class="detail__time">
+                            <input type="text" name="clock_in" id="clock_in" value="{{ $latestCorrection->clock_in_correction_formatted }}" readonly>
+                            <p>～</p>
+                            <input type="text" name="clock_out" id="clock_out" value="{{ $latestCorrection->clock_out_correction_formatted }}" readonly>
+                        </div>
+                    </td>
+                </tr>
+                @foreach ($breakCorrections as $break_time)
+                    <tr class="attendance__detail__row">
+                        <th class="attendance__detail__label">
+                            休憩
+                            @if ($loop->iteration > 1)
+                                {{ $loop->iteration }}
+                            @endif
+                        </th>
+                        <td class="attendance__detail__data">
+                            <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}">
+                            <div class="detail__time">
+                                <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_correction_formatted }}" readonly>
+                                <p>～</p>
+                                <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end_correction_formatted }}" readonly>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                <tr class="attendance__detail__row">
+                    <th class="attendance__detail__label">備考</th>
+                    <td class="attendance__detail__data detail__reason">
+                        <textarea name="reason" id="reason" readonly>{{ old('reason', $latestCorrection->reason_correction) }}</textarea>
+                    </td>
+                </tr>
+            @endif
         </table>
+
         <div class="attendance__detail__status">
-            @if($latestCorrection && $latestCorrection->approval_status === 'pending')
+            @if($isPending)
                 {{-- 承認待ちの場合 --}}
                 <p class="attendance__detail__status__pending">
                     *承認待ちのため修正はできません。

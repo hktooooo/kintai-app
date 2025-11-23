@@ -23,6 +23,11 @@ class BreakTime extends Model
         return $this->belongsTo(Attendance::class);
     }
 
+    public function break_corrections()
+    {
+        return $this->hasMany(BreakCorrection::class);
+    }
+
     // 日付キャスト
     protected $casts = [
         'break_start' => 'datetime',

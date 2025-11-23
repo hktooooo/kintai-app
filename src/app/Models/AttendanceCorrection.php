@@ -12,6 +12,9 @@ class AttendanceCorrection extends Model
     protected $fillable = [
         'user_id',
         'attendance_id',
+        'clock_in_correction',
+        'clock_out_correction',
+        'reason_correction',
         'requested_date',
         'approval_status',
     ];
@@ -27,9 +30,16 @@ class AttendanceCorrection extends Model
         return $this->belongsTo(Attendance::class);
     }
 
+    public function breakCorrections()
+    {
+        return $this->hasMany(BreakCorrection::class, 'attendance_correction_id');
+    }
+
     // 日付キャスト
     protected $casts = [
         'requested_date' => 'datetime',
+        'clock_in_correction' => 'datetime',
+        'clock_out_correction' => 'datetime',
     ];
 
     // アクセサ（Y/m/d に整形）
@@ -37,6 +47,20 @@ class AttendanceCorrection extends Model
     {
         return $this->requested_date
             ? $this->requested_date->format('Y/m/d')
+            : null;
+    }
+
+    public function getClockInCorrectionFormattedAttribute()
+    {
+        return $this->clock_in_correction
+            ? $this->clock_in_correction->format('H:i')
+            : null;
+    }
+
+    public function getClockOutCorrectionFormattedAttribute()
+    {
+        return $this->clock_out_correction
+            ? $this->clock_out_correction->format('H:i')
             : null;
     }
 }

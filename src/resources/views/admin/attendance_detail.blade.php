@@ -47,7 +47,7 @@
                         @endif
                     </th>
                     <td class="attendance__detail__data">
-                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}">
+                        <input type="hidden" name="breaks[{{ $break_time->id }}][break_id]" value="{{ $break_time->id }}">
                         <div class="detail__time">
                             <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_formatted }}">
                             <p>～</p>
@@ -60,11 +60,12 @@
             <tr class="attendance__detail__row">
                 <th class="attendance__detail__label">
                     休憩
-                    @if ($break_times->count() > 1)
+                    @if ($break_times->count() >= 1)
                         {{ $break_times->count() + 1 }}
                     @endif
                 </th>
                 <td class="attendance__detail__data">
+                    <input type="hidden" name="breaks[new][break_id]" value="">
                     <div class="detail__time">
                         <input type="text" name="breaks[new][break_start]" value="">
                         <p>～</p>
