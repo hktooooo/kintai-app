@@ -8,6 +8,7 @@ use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\AttendanceCorrection;
 use App\Models\BreakCorrection;
+use App\Http\Requests\CorrectionRequest;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -282,7 +283,7 @@ class AttendanceController extends Controller
     }
 
     // 勤怠詳細画面から修正を申請
-    public function submitDetailCorrection(Request $request)
+    public function submitDetailCorrection(CorrectionRequest $request)
     {
         // 現在ログインしているユーザーID
         $userId = Auth::id();

@@ -142,5 +142,33 @@
             @endif
         </div>
     </form>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                {{-- 出勤・退勤のエラー --}}
+                @if($errors->has('clock_in'))
+                    <li>{{ $errors->first('clock_in') }}</li>
+                @endif
+                @if($errors->has('clock_out'))
+                    <li>{{ $errors->first('clock_out') }}</li>
+                @endif
+
+                {{-- 休憩のエラー --}}
+                @foreach ($errors->getMessages() as $key => $messages)
+                    @if (str_starts_with($key, 'breaks.'))
+                        @foreach ($messages as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    @endif
+                @endforeach
+
+                {{-- 備考のエラー --}}
+                @if($errors->has('reason'))
+                    <li>{{ $errors->first('reason') }}</li>
+                @endif
+            </ul>
+        </div>
+    @endif
 </div>
 @endsection

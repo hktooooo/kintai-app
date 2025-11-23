@@ -8,6 +8,7 @@ use App\Models\AttendanceCorrection;
 use App\Models\BreakTime;
 use App\Models\BreakCorrection;
 use App\Models\User;
+use App\Http\Requests\CorrectionRequest;
 use Carbon\Carbon;
 
 class AdminAttendanceController extends Controller
@@ -51,7 +52,7 @@ class AdminAttendanceController extends Controller
     }
 
     // 管理者 勤怠詳細画面から修正
-    public function adminDetailCorrection(Request $request)
+    public function adminDetailCorrection(CorrectionRequest $request)
     {
         $attendance_id = $request->id;
 
