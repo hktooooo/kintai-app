@@ -66,9 +66,12 @@ class AdminAttendanceController extends Controller
 
         // 合計の休憩時間計算用
         $totalBreakSeconds = 0;
+        
+        // breaks が null の場合は空配列にする
+        $breaks = $request->breaks ?? [];
 
         // 休憩情報を登録
-        foreach ($request->breaks as $breakInput) {
+        foreach ($breaks as $breakInput) {
             // break_id が存在する → 既存休憩を更新
             if (!empty($breakInput['break_id'])) {
 
@@ -245,7 +248,7 @@ class AdminAttendanceController extends Controller
         $breaks = $request->breaks ?? [];
 
         // 休憩情報を登録
-        foreach ($request->breaks as $breakInput) {
+        foreach ($breaks as $breakInput) {
             // break_start または break_end が空ならスキップ
             if (empty($breakInput['break_start']) || empty($breakInput['break_end'])) {
                 continue;
