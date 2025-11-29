@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class Attendance extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'work_date',
