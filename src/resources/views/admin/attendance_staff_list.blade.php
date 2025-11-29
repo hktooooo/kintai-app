@@ -65,10 +65,11 @@
         @endforeach
     </table>
 
-    <div class="attendance__staff__list__output-box">
-        <button class="attendance__staff__list__output btn" type="submit">
+    <form class="attendance__staff__list__output-box" action="{{ route('attendance.export.csv', ['id' => $user->id]) }}" method="GET">
+        <input type="hidden" name="month" id="month" value="{{ request('month', date('Y-m')) }}">
+        <button type="submit" class="attendance__staff__list__output btn">
             CSV出力
         </button>
-    </div>
+    </form>
 </div>
 @endsection

@@ -10,6 +10,7 @@ use App\Models\BreakCorrection;
 use App\Models\User;
 use App\Http\Requests\CorrectionRequest;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminAttendanceController extends Controller
 {
@@ -66,7 +67,7 @@ class AdminAttendanceController extends Controller
 
         // 合計の休憩時間計算用
         $totalBreakSeconds = 0;
-        
+
         // breaks が null の場合は空配列にする
         $breaks = $request->breaks ?? [];
 
@@ -306,5 +307,95 @@ class AdminAttendanceController extends Controller
         $attendance->save();
 
         return redirect()->back();
-    }    
+    }
+
+    public function exportAttendanceCsv($id, Request $request)
+    {
+        // $idで受け取ったユーザーID
+        $userId = $id;
+
+        // クエリパラメータ ?month=2025-11 の形式で受け取る
+        $monthParam = $request->query('month', date('Y-m'));    // デフォルト今月
+        $current = Carbon::parse($monthParam . '-01');
+
+        $fileName = 'attendance_' . date('Ymd_His') . '.csv';
+
+        $response = new StreamedResponse(function () use ($userId, $current) {
+
+            $handle = fopen('php://output', 'w');
+
+            // Excel で文字化けしないように Shift-JIS へ変換
+            $header = [
+                '氏名',
+                '日付',
+                '出勤時間',
+                '退勤時間',
+                '休憩時間',
+                '勤務時間合計',
+                '備考'
+            ];
+
+            // Shift-JIS に変換して出力
+            fputcsv($handle, mb_convert_encoding($header, 'SJIS-win', 'UTF-8'));
+
+            // Attendance を chunk で取得しながら出力
+            Attendance::with('user')
+                ->where('user_id', $userId)
+                ->whereYear('work_date', $current->year)
+                ->whereMonth('work_date', $current->month)
+                ->orderBy('work_date')
+                ->chunk(500, function ($rows) use ($handle) {
+                    foreach ($rows as $row) {
+
+                        // ---- ユーザ名取得 ----
+                        $userName = $row->user ? $row->user->name : '未設定';
+
+                        // ---- 日付のみへ変換 ----
+                        $workDate = $row->work_date
+                            ? date('Y-m-d', strtotime($row->work_date))
+                            : null;
+
+                        // ---- 時間のみへ変換 ----
+                        $clockIn = $row->clock_in
+                            ? date('H:i', strtotime($row->clock_in))
+                            : null;
+                        $clockOut = $row->clock_out
+                            ? date('H:i', strtotime($row->clock_out))
+                            : null;
+                        $totalBreak = $row->total_break
+                            ? date('H:i', strtotime($row->total_break))
+                            : null;
+                        $workingHours = $row->working_hours
+                            ? date('H:i', strtotime($row->working_hours))
+                            : null;
+                    
+                        // CSV行
+                        $csvRow = [
+                            $userName,
+                            $workDate,       // 変換後の値
+                            $clockIn,        // 変換後の値
+                            $clockOut,       // 変換後の値
+                            $totalBreak,     // 変換後の値
+                            $workingHours,   // 変換後の値
+                            $row->reason,
+                        ];
+
+                        // Shift-JIS に変換
+                        $encodedRow = array_map(function ($v) {
+                            return mb_convert_encoding($v, 'SJIS-win', 'UTF-8');
+                        }, $csvRow);
+
+                        fputcsv($handle, $encodedRow);
+                    }
+                });
+
+            fclose($handle);
+        });
+
+        // ダウンロードヘッダー
+        $response->headers->set('Content-Type', 'text/csv; charset=Shift_JIS');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+
+        return $response;
+    }
 }
