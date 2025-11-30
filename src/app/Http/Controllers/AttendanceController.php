@@ -66,7 +66,7 @@ class AttendanceController extends Controller
             'status' => 'working',
         ]);
 
-        return back();
+        return redirect('/attendance');
     }
     
     // 退勤登録
@@ -106,7 +106,7 @@ class AttendanceController extends Controller
         $seconds = $start->diffInSeconds($end);
 
         // 休憩時間の合計を取得
-        $total_break = $attendance->total_break; // HH:MM:SS 文字列
+        $total_break = $attendance->total_break ?? '00:00:00'; // HH:MM:SS 文字列
 
         // 秒に変換
         if ($total_break) {
@@ -129,7 +129,7 @@ class AttendanceController extends Controller
         // 保存
         $attendance->save(); 
 
-        return back();
+        return redirect('/attendance');
     }
 
     // 休憩開始登録
@@ -160,7 +160,7 @@ class AttendanceController extends Controller
         $attendance->status = 'break';  
         $attendance->save();
 
-        return back();
+        return redirect('/attendance');
     }
 
     // 休憩終了登録
@@ -218,7 +218,7 @@ class AttendanceController extends Controller
         // 出席を保存
         $attendance->save(); 
 
-        return back();
+        return redirect('/attendance');
     }
     
     // 勤怠一覧の表示

@@ -39,9 +39,9 @@ class Attendance extends Model
 
     // 日付キャスト
     protected $casts = [
-        'work_date' => 'datetime',
-        'clock_in' => 'datetime',
-        'clock_out' => 'datetime',
+        'work_date' => 'datetime:Y-m-d',
+        'clock_in' => 'datetime:H:i:s',
+        'clock_out' => 'datetime:H:i:s',
         'working_hours' => 'datetime',
         'total_break' => 'datetime',
     ];
