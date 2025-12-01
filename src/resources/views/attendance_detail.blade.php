@@ -14,7 +14,9 @@
 
         // 承認待ちかどうか
         $isPending = $latestCorrection && $latestCorrection->approval_status === 'pending';
-        [$last_name, $first_name] = explode(' ', $attendance->user->name);
+        $nameParts = explode(' ', $attendance->user->name);
+        $last_name = $nameParts[0] ?? '';
+        $first_name = $nameParts[1] ?? '';
         [$year, $month_day] = explode(' ', $attendance->work_date_japanese);
     @endphp
 
