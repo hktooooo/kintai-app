@@ -8,7 +8,9 @@
 <div class="attendance__detail__content">
     <h1 class="attendance__detail__header">勤怠詳細</h1>
     @php
-        [$last_name, $first_name] = explode(' ', $attendance->user->name);
+        $nameParts = explode(' ', $attendance->user->name);
+        $last_name = $nameParts[0] ?? '';
+        $first_name = $nameParts[1] ?? '';
         [$year, $month_day] = explode(' ', $attendance->work_date_japanese);
     @endphp
 
