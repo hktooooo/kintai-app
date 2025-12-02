@@ -45,7 +45,8 @@ class CorrectionRequest extends FormRequest
             // 両方未入力なら休憩もチェック不要
             if (!$clockIn && !$clockOut) {
                 $validator->errors()->add('clock_in', '出勤時間と退勤時間を入力してください');   
-            } return;
+                return;
+            }
 
             $clockInM  = $this->toMinutes($clockIn);
             $clockOutM = $this->toMinutes($clockOut);
@@ -115,9 +116,17 @@ class CorrectionRequest extends FormRequest
                     }
 
                     // 勤務時間内チェック2
-                    if ($endM > $clockOutM) {
+                    if ($startM > $endM) {
                         $validator->errors()->add(
                             "breaks.$index.break_start",
+                            "休憩時間が不適切な値です"
+                        );
+                    }
+
+                    // 勤務時間内チェック3
+                    if ($startM > $clockInM && $endM > $clockOutM) {
+                        $validator->errors()->add(
+                            "breaks.$index.break_end",
                             "休憩時間もしくは退勤時間が不適切な値です"
                         );
                     }

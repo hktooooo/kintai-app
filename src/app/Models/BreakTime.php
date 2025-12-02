@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class BreakTime extends Model
 {
+    use HasFactory;
+
     protected $table = 'breaks';
 
     protected $fillable = [
@@ -30,8 +32,8 @@ class BreakTime extends Model
 
     // 日付キャスト
     protected $casts = [
-        'break_start' => 'datetime',
-        'break_end' => 'datetime',
+        'break_start' => 'datetime:H:i:s',
+        'break_end' => 'datetime:H:i:s',
     ];
 
     public function getBreakStartFormattedAttribute()
