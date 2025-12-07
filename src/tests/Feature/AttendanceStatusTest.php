@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 5. ステータス確認機能
 class AttendanceStatusTest extends TestCase
 {
     use RefreshDatabase;

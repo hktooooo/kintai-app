@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 4. 日時取得機能
 class CurrentTest extends TestCase
 {
     use RefreshDatabase;

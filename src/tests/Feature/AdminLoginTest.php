@@ -7,6 +7,7 @@ use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
+// ID 3. ログイン認証機能（管理者）
 class AdminLoginTest extends TestCase
 {
     use DatabaseMigrations;

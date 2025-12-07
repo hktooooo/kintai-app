@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 9. 勤怠一覧情報取得機能（一般ユーザー）
 class AttendanceListTest extends TestCase
 {
     use RefreshDatabase;

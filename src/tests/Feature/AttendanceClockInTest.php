@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 6. 出勤機能
 class AttendanceClockInTest extends TestCase
 {
     use RefreshDatabase;

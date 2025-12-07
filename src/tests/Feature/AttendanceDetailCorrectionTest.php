@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 11. 勤怠詳細情報修正機能（一般ユーザー）
 class AttendanceDetailCorrectionTest extends TestCase
 {
     use RefreshDatabase;

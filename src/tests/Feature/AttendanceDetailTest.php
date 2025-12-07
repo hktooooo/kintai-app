@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\BreakTime;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 10. 勤怠詳細情報取得機能（一般ユーザー）
 class AttendanceDetailTest extends TestCase
 {
     use RefreshDatabase;
@@ -170,9 +172,12 @@ class AttendanceDetailTest extends TestCase
             'status' => 'completed',
         ]);
         
-        // 休憩情報を登録　～～～～～
-
-
+        // 休憩情報を登録
+        $break_time = BreakTime::factory()->create([
+            'attendance_id' => $attendance->id,
+            'break_start' => '12:00:00',
+            'break_end' => '13:00:00',
+        ]);
 
         $id = $attendance -> id;
 

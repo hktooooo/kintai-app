@@ -7,6 +7,7 @@ use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
+// ID 2. ログイン認証機能（一般ユーザー）
 class UserLoginTest extends TestCase
 {
     use DatabaseMigrations;

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 7. 休憩機能
 class AttendanceBreakTest extends TestCase
 {
     use RefreshDatabase;
