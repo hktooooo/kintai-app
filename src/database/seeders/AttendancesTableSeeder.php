@@ -34,5 +34,21 @@ class AttendancesTableSeeder extends Seeder
                 'status' => 'completed'
             ]);
         }
+
+        // 11/3のみ複数ユーザー
+        $date = Carbon::parse('2025-11-03');
+
+        // ユーザループ
+        for ($i = 2; $i <= 6; $i++) {
+            Attendance::create([
+                'user_id'  => $i,
+                'work_date'     => $date->toDateString(),
+                'clock_in' => $date->copy()->setTime(9, 0),
+                'clock_out'=> $date->copy()->setTime(18, 0),
+                'working_hours' => "08:00:00",
+                'total_break' => "01:00:00",
+                'status' => 'completed'
+            ]);
+        }
     }
 }

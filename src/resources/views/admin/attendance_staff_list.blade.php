@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="attendance__list__content">
-    <h1 class="attendance__list__header">{{ str_replace([' ', '　'], '', $user->name) }}さんの一覧</h1>
+    <h1 class="attendance__list__header">{{ str_replace([' ', '　'], '', $user->name) }}さんの勤怠</h1>
 
     <div class="attendance__list__month-select-box">
         <a class="attendance__list__prev-next-month" href="{{ route('admin.attendance_staff_list', ['id' => $user->id, 'month' => $prevMonth]) }}"><img src="{{ asset('images/image_prev.png') }}" alt="arrow_prev"><span>前月</span></a>
@@ -65,10 +65,11 @@
         @endforeach
     </table>
 
-    <div class="attendance__staff__list__output-box">
-        <button class="attendance__staff__list__output btn" type="submit">
+    <form class="attendance__staff__list__output-box" action="{{ route('attendance.export.csv', ['id' => $user->id]) }}" method="GET">
+        <input type="hidden" name="month" id="month" value="{{ request('month', date('Y-m')) }}">
+        <button type="submit" class="attendance__staff__list__output btn">
             CSV出力
         </button>
-    </div>
+    </form>
 </div>
 @endsection

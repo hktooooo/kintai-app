@@ -29,6 +29,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'showAttendanceStaffList'])->name('admin.attendance_staff_list');
         Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminAttendanceController::class, 'approveCorrectRequest'])->name('admin.approve_correct_request');
         Route::post('/stamp_correction_request/approve/exec', [AdminAttendanceController::class, 'approveCorrectRequestExec'])->name('admin.approve_correct_request_exec');
+        Route::get('/attendance/staff/{id}/export_csv', [AdminAttendanceController::class, 'exportAttendanceCsv'])->name('attendance.export.csv');
     });
 });
 

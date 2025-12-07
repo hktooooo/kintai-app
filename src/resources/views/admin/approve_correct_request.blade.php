@@ -9,13 +9,11 @@
     <h1 class="approve__header">勤怠詳細</h1>
 
     @php
-        // 最新の修正申請（なければ null）
-        $latestCorrection = $attendance->corrections->last();
         // 承認待ちかどうか
-        $isPending = $latestCorrection && $latestCorrection->approval_status === 'pending';
+        $isPending = $attendance_correction->approval_status === 'pending';
 
-        [$last_name, $first_name] = explode(' ', $attendance->user->name);
-        [$year, $month_day] = explode(' ', $attendance->work_date_japanese);
+        [$last_name, $first_name] = explode(' ', $attendance_correction->user->name);
+        [$year, $month_day] = explode(' ', $attendance_correction->attendance->work_date_japanese);
     @endphp
 
     <form action="{{ route('admin.approve_correct_request_exec') }}" method="post">
@@ -38,13 +36,13 @@
                 <th class="approve__label">出勤・退勤</th>
                 <td>
                     <div class="detail__time">
-                        <input type="text" name="clock_in" id="clock_in" value="{{ $attendance->clock_in_formatted }}" disabled>
+                        <input type="text" name="clock_in" id="clock_in" value="{{ $attendance_correction->clock_in_correction_formatted }}" readonly>
                         <p>～</p>
-                        <input type="text" name="clock_out" id="clock_out" value="{{ $attendance->clock_out_formatted }}" disabled>
+                        <input type="text" name="clock_out" id="clock_out" value="{{ $attendance_correction->clock_out_correction_formatted }}" readonly>
                     </div>
                 </td>
             </tr>
-            @foreach ($break_times as $break_time)
+            @foreach ($break_time_corrections as $break_time)
                 <tr class="approve__row">
                     <th class="approve__label">
                         休憩
@@ -53,11 +51,11 @@
                         @endif
                     </th>
                     <td class="approve__data">
-                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}" disabled>
+                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}" readonly>
                         <div class="detail__time">
-                            <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_formatted }}" disabled>
+                            <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_correction_formatted }}" readonly>
                             <p>～</p>
-                            <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end_formatted }}" disabled>
+                            <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end_correction_formatted }}" readonly>
                         </div>
                     </td>
                 </tr>
@@ -66,27 +64,22 @@
             <tr class="approve__row">
                 <th class="approve__label">
                     休憩
-                    @if ($break_times->count() > 1)
-                        {{ $break_times->count() + 1 }}
+                    @if ($break_time_corrections->count() >= 1)
+                        {{ $break_time_corrections->count() + 1 }}
                     @endif
                 </th>
                 <td class="approve__data">
-                    <div class="detail__time">
-                        <input type="text" name="breaks[new][break_start]" value="" disabled>
-                        <p>～</p>
-                        <input type="text" name="breaks[new][break_end]" value="" disabled>
-                    </div>
                 </td>
             </tr>
             <tr class="approve__row">
                 <th class="approve__label">備考</th>
                 <td class="approve__data detail__reason">
-                    <textarea name="reason" id="reason" disabled>{{ $attendance->reason }}</textarea>
+                    <textarea name="reason" id="reason" readonly>{{ $attendance_correction->reason_correction }}</textarea>
                 </td>
             </tr>
         </table>
         <div class="approve__exec__btn-box">
-            @if($latestCorrection && $latestCorrection->approval_status === 'pending')
+            @if($isPending)
                 {{-- 承認待ちの場合 --}}
                 <button class="approve__exec btn" type="submit">
                     承認

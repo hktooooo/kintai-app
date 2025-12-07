@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\AttendanceCorrection;
+use App\Models\BreakCorrection;
+use App\Http\Requests\CorrectionRequest;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -64,7 +66,7 @@ class AttendanceController extends Controller
             'status' => 'working',
         ]);
 
-        return back();
+        return redirect('/attendance');
     }
     
     // 退勤登録
@@ -104,7 +106,7 @@ class AttendanceController extends Controller
         $seconds = $start->diffInSeconds($end);
 
         // 休憩時間の合計を取得
-        $total_break = $attendance->total_break; // HH:MM:SS 文字列
+        $total_break = $attendance->total_break ?? '00:00:00'; // HH:MM:SS 文字列
 
         // 秒に変換
         if ($total_break) {
@@ -127,7 +129,7 @@ class AttendanceController extends Controller
         // 保存
         $attendance->save(); 
 
-        return back();
+        return redirect('/attendance');
     }
 
     // 休憩開始登録
@@ -158,7 +160,7 @@ class AttendanceController extends Controller
         $attendance->status = 'break';  
         $attendance->save();
 
-        return back();
+        return redirect('/attendance');
     }
 
     // 休憩終了登録
@@ -216,7 +218,7 @@ class AttendanceController extends Controller
         // 出席を保存
         $attendance->save(); 
 
-        return back();
+        return redirect('/attendance');
     }
     
     // 勤怠一覧の表示
@@ -270,12 +272,18 @@ class AttendanceController extends Controller
         $attendance = Attendance::with(['user', 'corrections'])->findOrFail($id);
         $break_times = BreakTime::where('attendance_id', $id)->get();
 
+        // ログインユーザーと勤怠データのuser_idが一致しない場合
+        if ($attendance->user_id !== Auth::id()) {
+            // 元の画面に戻す（フラッシュメッセージ付き）
+            return redirect()->back()->with('error', 'アクセス権限がありません。');
+        }
+        
         // 詳細ページに渡す
         return view('attendance_detail', compact('attendance', 'break_times'));
     }
 
     // 勤怠詳細画面から修正を申請
-    public function submitDetailCorrection(Request $request)
+    public function submitDetailCorrection(CorrectionRequest $request)
     {
         // 現在ログインしているユーザーID
         $userId = Auth::id();
@@ -286,30 +294,43 @@ class AttendanceController extends Controller
         $attendance_id = $request->id;
 
         // 修正情報を新規登録
-        AttendanceCorrection::create([
+        $attendanceCorrection = AttendanceCorrection::create([
             'user_id' => $userId,
             'attendance_id' => $attendance_id,
+            'clock_in_correction' => $request->clock_in,
+            'clock_out_correction' => $request->clock_out,
+            'reason_correction' => $request->reason,
             'requested_date' => $today,
             'approval_status' => 'pending',
         ]);
 
-        // 対象の出勤記録を取得
-        $attendance = Attendance::findOrFail($attendance_id);
+        // 休憩時間の修正をループで保存
+        if ($request->has('breaks')) {
+            foreach ($request->breaks as $break) {
 
-        // 値を更新
-        $attendance->clock_in = $request->clock_in;
-        $attendance->clock_out = $request->clock_out;
-        $attendance->reason = $request->reason;
+                // 新規休憩の場合
+                if (empty($break['break_id'])) {
+                    if (!empty($break['break_start']) || !empty($break['break_end'])) {
+                        BreakCorrection::create([
+                            'attendance_correction_id' => $attendanceCorrection->id,
+                            'break_id' => null, // 元データに紐付かない
+                            'break_start_correction' => $break['break_start'] ?? null,
+                            'break_end_correction' => $break['break_end'] ?? null,
+                        ]);
+                    }
 
-        // 勤務時間を計算（時間単位で）
-        $start = Carbon::parse($attendance->clock_in);
-        $end = Carbon::parse($attendance->clock_out);
-        $workingHours = $start->diffInMinutes($end) / 60; // 分→時間に変換
+                    continue;
+                }
 
-        $attendance->working_hours = round($workingHours, 2);
-
-        // 保存
-        $attendance->save();
+                // 既存休憩 → 修正登録
+                BreakCorrection::create([
+                    'attendance_correction_id' => $attendanceCorrection->id,
+                    'break_id' => $break['break_id'],
+                    'break_start_correction' => $break['break_start'] ?? null,
+                    'break_end_correction' => $break['break_end'] ?? null,
+                ]);
+            }
+        }
 
         return redirect()->back();
     }

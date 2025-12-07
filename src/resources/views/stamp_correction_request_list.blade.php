@@ -44,20 +44,22 @@
                         {{ $correction->attendance->work_date_formatted }}
                     </td>
                     <td class="stamp__list__data">
-                        {{ $correction->attendance->reason }}
+                        {{ $correction->reason_correction }}
                     </td>
                     <td class="stamp__list__data">
                         {{ $correction->requested_date_formatted }}
                     </td>
                     <td class="stamp__list__data">
                         @if(Auth::guard('admin')->check())
-                            <a href="{{ route('admin.approve_correct_request', ['attendance_correct_request_id' => $correction->attendance_id]) }}">
+                            <a href="{{ route('admin.approve_correct_request', ['attendance_correct_request_id' => $correction->id]) }}">
                                 詳細
                             </a>
                         @elseif(Auth::check())
-                            <a href="{{ route('attendance.detail', ['id' => $correction->attendance_id]) }}">
-                                詳細
-                            </a>
+                            @if($tab !== 'approved')
+                                <a href="{{ route('attendance.detail', ['id' => $correction->attendance_id]) }}">
+                                    詳細
+                                </a>
+                            @endif
                         @endif
                     </td>
                 </tr>

@@ -8,7 +8,9 @@
 <div class="attendance__detail__content">
     <h1 class="attendance__detail__header">勤怠詳細</h1>
     @php
-        [$last_name, $first_name] = explode(' ', $attendance->user->name);
+        $nameParts = explode(' ', $attendance->user->name);
+        $last_name = $nameParts[0] ?? '';
+        $first_name = $nameParts[1] ?? '';
         [$year, $month_day] = explode(' ', $attendance->work_date_japanese);
     @endphp
 
@@ -47,7 +49,7 @@
                         @endif
                     </th>
                     <td class="attendance__detail__data">
-                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}">
+                        <input type="hidden" name="breaks[{{ $break_time->id }}][break_id]" value="{{ $break_time->id }}">
                         <div class="detail__time">
                             <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_formatted }}">
                             <p>～</p>
@@ -60,11 +62,12 @@
             <tr class="attendance__detail__row">
                 <th class="attendance__detail__label">
                     休憩
-                    @if ($break_times->count() > 1)
+                    @if ($break_times->count() >= 1)
                         {{ $break_times->count() + 1 }}
                     @endif
                 </th>
                 <td class="attendance__detail__data">
+                    <input type="hidden" name="breaks[new][break_id]" value="">
                     <div class="detail__time">
                         <input type="text" name="breaks[new][break_start]" value="">
                         <p>～</p>
@@ -85,5 +88,33 @@
             </button>
         </div>
     </form>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                {{-- 出勤・退勤のエラー --}}
+                @if($errors->has('clock_in'))
+                    <li>{{ $errors->first('clock_in') }}</li>
+                @endif
+                @if($errors->has('clock_out'))
+                    <li>{{ $errors->first('clock_out') }}</li>
+                @endif
+
+                {{-- 休憩のエラー --}}
+                @foreach ($errors->getMessages() as $key => $messages)
+                    @if (str_starts_with($key, 'breaks.'))
+                        @foreach ($messages as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    @endif
+                @endforeach
+
+                {{-- 備考のエラー --}}
+                @if($errors->has('reason'))
+                    <li>{{ $errors->first('reason') }}</li>
+                @endif
+            </ul>
+        </div>
+    @endif
 </div>
 @endsection

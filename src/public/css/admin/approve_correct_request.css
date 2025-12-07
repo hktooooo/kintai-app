@@ -111,8 +111,8 @@ table {
     margin-right: 136px;
 }
 
-.detail__time input:disabled,
-.detail__reason textarea:disabled {
+.detail__time input:read-only,
+.detail__reason textarea:read-only {
     border: none;
 }
 
