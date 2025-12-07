@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class BreakCorrection extends Model
 {
+    use HasFactory;
+    
     protected $table = 'break_corrections';
 
     protected $fillable = [
@@ -29,8 +31,8 @@ class BreakCorrection extends Model
 
     // 日付キャスト
     protected $casts = [
-        'break_start_correction' => 'datetime',
-        'break_end_correction' => 'datetime',
+        'break_start_correction' => 'datetime:H:i:s',
+        'break_end_correction' => 'datetime:H:i:s',
     ];
 
     public function getBreakStartCorrectionFormattedAttribute()

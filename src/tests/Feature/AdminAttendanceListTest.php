@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 12. 勤怠一覧情報取得機能（管理者）
 class AdminAttendanceListTest extends TestCase
 {
     use RefreshDatabase;

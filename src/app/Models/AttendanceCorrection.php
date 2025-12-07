@@ -37,9 +37,9 @@ class AttendanceCorrection extends Model
 
     // 日付キャスト
     protected $casts = [
-        'requested_date' => 'datetime',
-        'clock_in_correction' => 'datetime',
-        'clock_out_correction' => 'datetime',
+        'requested_date' => 'datetime:Y-m-d',
+        'clock_in_correction' => 'datetime:H:i:s',
+        'clock_out_correction' => 'datetime:H:i:s',
     ];
 
     // アクセサ（Y/m/d に整形）

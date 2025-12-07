@@ -5,16 +5,19 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Attendance;
+use App\Models\AttendanceCorrection;
+use App\Models\BreakCorrection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 15. 勤怠情報修正機能（管理者）
 class AdminStampCorrectionTest extends TestCase
 {
     use RefreshDatabase;
 
-    // 管理者が全一般ユーザーの氏名・メールアドレスを確認できる
-    public function test_admin_all_staffs()
+    // 管理者 承認待ちの修正申請が全て表示される
+    public function test_admin_correction_list_pending()
     {
         // 固定日時を設定（テスト用）
         $fixedNow = Carbon::parse('2025-11-30 20:00:00', 'Asia/Tokyo');
@@ -46,54 +49,7 @@ class AdminStampCorrectionTest extends TestCase
             'password' => bcrypt('password3'),
         ]);
 
-        // 管理者ログインして /admin/staff/list をリクエスト
-        $response = $this->actingAs($admin, 'admin')->get('/admin/staff/list');
-        $this->assertAuthenticatedAs($admin, guard: 'admin');
-        
-        // タイトル表示の確認
-        $response->assertSee('スタッフ一覧');
-        
-        // ユーザ1の情報
-        $response->assertSeeInOrder([
-            'test_user1', 
-            'test1@example.com',
-        ]);
-
-        // ユーザ2の情報
-        $response->assertSeeInOrder([
-            'test_user2', 
-            'test2@example.com',
-        ]);
-
-        // ユーザ3の情報
-        $response->assertSeeInOrder([
-            'test_user3', 
-            'test3@example.com',
-        ]);
-    }
-
-    // ユーザーの今月の勤怠情報を表示
-    public function test_admin_attendance_staff_list()
-    {
-        // 固定日時を設定（テスト用）
-        $fixedNow = Carbon::parse('2025-11-30 20:00:00', 'Asia/Tokyo');
-        Carbon::setTestNow($fixedNow);
-
-        // 管理者登録
-        $admin = Admin::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@test.com',
-            'password' => bcrypt('12345678'),
-        ]);
-
-        // ユーザー登録
-        $user1 = User::factory()->create([
-            'name' => 'test_user1',
-            'email' => 'test1@example.com',
-            'password' => bcrypt('password1'),
-        ]);
-
-        // 出退勤情報を登録 今月 3日分
+        // 出退勤情報を登録 3人分
         $attendance1 = Attendance::factory()->create([
             'user_id' => $user1->id,
             'work_date' => '2025-11-01',
@@ -104,8 +60,8 @@ class AdminStampCorrectionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
+        $attendance2 = Attendance::factory()->create([
+            'user_id' => $user2->id,
             'work_date' => '2025-11-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
@@ -114,8 +70,8 @@ class AdminStampCorrectionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
+        $attendance3 = Attendance::factory()->create([
+            'user_id' => $user3->id,
             'work_date' => '2025-11-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
@@ -124,53 +80,68 @@ class AdminStampCorrectionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        // 管理者ログインして /admin/attendance/list をリクエスト
-        $response = $this->actingAs($admin, 'admin')->get('/admin/staff/list');
-        $this->assertAuthenticatedAs($admin, guard: 'admin');
-        
-        $id = $user1->id;
-
-        // ユーザ勤怠一覧をリクエスト
-        $responseList = $this->actingAs($admin, 'admin')->get("/admin/attendance/staff/{$id}");
-
-        $weekdays = ['日','月','火','水','木','金','土'];
-
-        // 11/1の勤怠
-        $date = Carbon::parse('2025-11-01');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseList->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        // 修正申請登録 3人分
+        $attendance_correction1 = AttendanceCorrection::factory()->create([
+            'user_id' => $user1->id,
+            'attendance_id' => $attendance1->id,
+            'clock_in_correction' => '09:00:00',
+            'clock_out_correction' => '18:00:00',
+            'reason_correction' => '修正テスト1',
+            'approval_status' => 'pending',
+            'requested_date' => now()->toDateString(),
         ]);
 
-        // 11/2の勤怠
-        $date = Carbon::parse('2025-11-02');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseList->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        $attendance_correction2 = AttendanceCorrection::factory()->create([
+            'user_id' => $user2->id,
+            'attendance_id' => $attendance2->id,
+            'clock_in_correction' => '09:00:00',
+            'clock_out_correction' => '18:00:00',
+            'reason_correction' => '修正テスト2',
+            'approval_status' => 'pending',
+            'requested_date' => now()->toDateString(),
         ]);
 
-        // 11/3の勤怠
-        $date = Carbon::parse('2025-11-03');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseList->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        $attendance_correction3 = AttendanceCorrection::factory()->create([
+            'user_id' => $user3->id,
+            'attendance_id' => $attendance3->id,
+            'clock_in_correction' => '09:00:00',
+            'clock_out_correction' => '18:00:00',
+            'reason_correction' => '修正テスト3',
+            'approval_status' => 'pending',
+            'requested_date' => now()->toDateString(),
+        ]);
+
+        // 管理者認証で申請一覧のをリクエスト
+        $response = $this->actingAs($admin, 'admin')
+            ->get("/stamp_correction_request/list");
+
+        $response->assertSeeInOrder([
+            '承認待ち',
+            'test_user1',
+            '2025/11/01',
+            '修正テスト1',
+            '2025/11/30',
+        ]);
+
+        $response->assertSeeInOrder([
+            '承認待ち',
+            'test_user2',
+            '2025/11/02',
+            '修正テスト2',
+            '2025/11/30',
+        ]);
+
+        $response->assertSeeInOrder([
+            '承認待ち',
+            'test_user3',
+            '2025/11/03',
+            '修正テスト3',
+            '2025/11/30',
         ]);
     }
 
-    // ユーザーの先月の勤怠情報を表示
-    public function test_admin_attendance_staff_prev_list()
+    // 管理者 承認済みの修正申請が全て表示される
+    public function test_admin_correction_list_approved()
     {
         // 固定日時を設定（テスト用）
         $fixedNow = Carbon::parse('2025-11-30 20:00:00', 'Asia/Tokyo');
@@ -183,17 +154,29 @@ class AdminStampCorrectionTest extends TestCase
             'password' => bcrypt('12345678'),
         ]);
 
-        // ユーザー登録
+        // ユーザー登録 3人分
         $user1 = User::factory()->create([
             'name' => 'test_user1',
             'email' => 'test1@example.com',
             'password' => bcrypt('password1'),
         ]);
 
-        // 出退勤情報を登録 先月 3日分
+        $user2 = User::factory()->create([
+            'name' => 'test_user2',
+            'email' => 'test2@example.com',
+            'password' => bcrypt('password2'),
+        ]);
+
+        $user3 = User::factory()->create([
+            'name' => 'test_user3',
+            'email' => 'test3@example.com',
+            'password' => bcrypt('password3'),
+        ]);
+
+        // 出退勤情報を登録 3人分
         $attendance1 = Attendance::factory()->create([
             'user_id' => $user1->id,
-            'work_date' => '2025-10-01',
+            'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
             'working_hours' => '08:00:00',
@@ -201,9 +184,9 @@ class AdminStampCorrectionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
-            'work_date' => '2025-10-02',
+        $attendance2 = Attendance::factory()->create([
+            'user_id' => $user2->id,
+            'work_date' => '2025-11-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
             'working_hours' => '08:00:00',
@@ -211,9 +194,9 @@ class AdminStampCorrectionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
-            'work_date' => '2025-10-03',
+        $attendance3 = Attendance::factory()->create([
+            'user_id' => $user3->id,
+            'work_date' => '2025-11-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
             'working_hours' => '08:00:00',
@@ -221,56 +204,68 @@ class AdminStampCorrectionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        // 管理者ログインして /admin/attendance/list をリクエスト
-        $response = $this->actingAs($admin, 'admin')->get('/admin/staff/list');
-        $this->assertAuthenticatedAs($admin, guard: 'admin');
-        
-        $id = $user1->id;
-
-        // 先月を作成
-        $prevMonth = Carbon::now()->copy()->subMonth()->format('Y-m');
-
-        // ユーザ勤怠一覧をリクエスト
-        $responsePrev = $this->actingAs($admin, 'admin')->get("/admin/attendance/staff/{$id}?month={$prevMonth}");
-
-        $weekdays = ['日','月','火','水','木','金','土'];
-
-        // 10/1の勤怠
-        $date = Carbon::parse('2025-10-01');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responsePrev->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        // 修正済み登録 3人分
+        $attendance_correction1 = AttendanceCorrection::factory()->create([
+            'user_id' => $user1->id,
+            'attendance_id' => $attendance1->id,
+            'clock_in_correction' => '09:00:00',
+            'clock_out_correction' => '18:00:00',
+            'reason_correction' => '修正テスト1',
+            'approval_status' => 'approved',
+            'requested_date' => now()->toDateString(),
         ]);
 
-        // 10/2の勤怠
-        $date = Carbon::parse('2025-10-02');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responsePrev->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        $attendance_correction2 = AttendanceCorrection::factory()->create([
+            'user_id' => $user2->id,
+            'attendance_id' => $attendance2->id,
+            'clock_in_correction' => '09:00:00',
+            'clock_out_correction' => '18:00:00',
+            'reason_correction' => '修正テスト2',
+            'approval_status' => 'approved',
+            'requested_date' => now()->toDateString(),
         ]);
 
-        // 10/3の勤怠
-        $date = Carbon::parse('2025-10-03');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responsePrev->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        $attendance_correction3 = AttendanceCorrection::factory()->create([
+            'user_id' => $user3->id,
+            'attendance_id' => $attendance3->id,
+            'clock_in_correction' => '09:00:00',
+            'clock_out_correction' => '18:00:00',
+            'reason_correction' => '修正テスト3',
+            'approval_status' => 'approved',
+            'requested_date' => now()->toDateString(),
+        ]);
+
+        // 管理者認証で申請一覧のをリクエスト
+        $response = $this->actingAs($admin, 'admin')
+            ->get("/stamp_correction_request/list?tab=approved");
+
+        $response->assertSeeInOrder([
+            '承認済み',
+            'test_user1',
+            '2025/11/01',
+            '修正テスト1',
+            '2025/11/30',
+        ]);
+
+        $response->assertSeeInOrder([
+            '承認済み',
+            'test_user2',
+            '2025/11/02',
+            '修正テスト2',
+            '2025/11/30',
+        ]);
+
+        $response->assertSeeInOrder([
+            '承認済み',
+            'test_user3',
+            '2025/11/03',
+            '修正テスト3',
+            '2025/11/30',
         ]);
     }
 
-    // ユーザーの翌月の勤怠情報を表示
-    public function test_admin_attendance_staff_next_list()
+    // 管理者 修正申請の詳細が表示される
+    public function test_admin_correction_detail()
     {
         // 固定日時を設定（テスト用）
         $fixedNow = Carbon::parse('2025-11-30 20:00:00', 'Asia/Tokyo');
@@ -285,107 +280,7 @@ class AdminStampCorrectionTest extends TestCase
 
         // ユーザー登録
         $user1 = User::factory()->create([
-            'name' => 'test_user1',
-            'email' => 'test1@example.com',
-            'password' => bcrypt('password1'),
-        ]);
-
-        // 出退勤情報を登録 翌月 3日分
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
-            'work_date' => '2025-12-01',
-            'clock_in' => '09:00:00',
-            'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
-            'status' => 'completed',
-        ]);
-
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
-            'work_date' => '2025-12-02',
-            'clock_in' => '09:00:00',
-            'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
-            'status' => 'completed',
-        ]);
-
-        $attendance1 = Attendance::factory()->create([
-            'user_id' => $user1->id,
-            'work_date' => '2025-12-03',
-            'clock_in' => '09:00:00',
-            'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
-            'status' => 'completed',
-        ]);
-
-        // 管理者ログインして /admin/attendance/list をリクエスト
-        $response = $this->actingAs($admin, 'admin')->get('/admin/staff/list');
-        $this->assertAuthenticatedAs($admin, guard: 'admin');
-        
-        $id = $user1->id;
-
-        // 翌月を作成
-        $nextMonth = Carbon::now()->copy()->addMonth()->format('Y-m');
-
-        // ユーザ勤怠一覧をリクエスト
-        $responseNext = $this->actingAs($admin, 'admin')->get("/admin/attendance/staff/{$id}?month={$nextMonth}");
-
-        $weekdays = ['日','月','火','水','木','金','土'];
-
-        // 12/1の勤怠
-        $date = Carbon::parse('2025-12-01');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseNext->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
-        ]);
-
-        // 12/2の勤怠
-        $date = Carbon::parse('2025-12-02');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseNext->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
-        ]);
-
-        // 12/3の勤怠
-        $date = Carbon::parse('2025-12-03');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseNext->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
-        ]);
-    }
-
-    // 今月の勤怠情報から勤怠詳細へ遷移
-    public function test_admin_attendance_staff_detail()
-    {
-        // 固定日時を設定（テスト用）
-        $fixedNow = Carbon::parse('2025-11-30 20:00:00', 'Asia/Tokyo');
-        Carbon::setTestNow($fixedNow);
-
-        // 管理者登録
-        $admin = Admin::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@test.com',
-            'password' => bcrypt('12345678'),
-        ]);
-
-        // ユーザー登録
-        $user1 = User::factory()->create([
-            'name' => 'test_user1',
+            'name' => '山田 太郎',
             'email' => 'test1@example.com',
             'password' => bcrypt('password1'),
         ]);
@@ -400,35 +295,152 @@ class AdminStampCorrectionTest extends TestCase
             'total_break' => '01:00:00',
             'status' => 'completed',
         ]);
-        
-        $id = $user1->id;
 
-        // 管理者ログイン
-        $this->actingAs($admin, 'admin');
-
-        // ユーザ勤怠一覧をリクエスト
-        $responseList = $this->get("/admin/attendance/staff/{$id}");
-        $this->assertAuthenticatedAs($admin, guard: 'admin');
-
-        $weekdays = ['日','月','火','水','木','金','土'];
-
-        // 11/1の勤怠
-        $date = Carbon::parse('2025-11-01');
-        $formattedDate = $date->format('m/d') . '(' . $weekdays[$date->dayOfWeek] . ')';
-        $responseList->assertSeeInOrder([
-            $formattedDate, 
-            '09:00',
-            '18:00',
-            '01:00',
-            '08:00',
+        // 修正申請登録
+        $attendance_correction1 = AttendanceCorrection::factory()->create([
+            'user_id' => $user1->id,
+            'attendance_id' => $attendance1->id,
+            'clock_in_correction' => '10:00:00',
+            'clock_out_correction' => '17:00:00',
+            'reason_correction' => '修正テスト1',
+            'approval_status' => 'pending',
+            'requested_date' => now()->toDateString(),
         ]);
 
-        $attendance_id = $attendance1 -> id;
+        // 修正休憩申請登録
+        $break_correction1 = BreakCorrection::factory()->create([
+            'attendance_correction_id' => $attendance_correction1->id,
+            'break_start_correction' => '11:00:00',
+            'break_end_correction' => '12:00:00',
+        ]);
 
-        // 「詳細」リンクの遷移先を取得
-        $responseDetail = $this->get("/admin/attendance/detail/{$attendance_id}");
+        $id = $attendance_correction1->id;
 
-        // ステータス 200（正常に開けた）を確認
-        $responseDetail->assertStatus(200);
+        // 管理者認証で修正申請詳細をリクエスト
+        $responseDetail = $this->actingAs($admin, 'admin')
+            ->get("/admin/stamp_correction_request/approve/{$id}");
+
+        $responseDetail->assertSeeInOrder([
+            '名前',
+            '山田',
+            '太郎',
+        ]);
+        $responseDetail->assertSeeInOrder([
+            '日付',
+            '2025年',
+            '11月1日',
+        ]);
+        $responseDetail->assertSeeInOrder([
+            '出勤・退勤',
+            '10:00',
+            '～',
+            '17:00',
+        ]);
+        $responseDetail->assertSeeInOrder([
+            '休憩',
+            '11:00',
+            '～',
+            '12:00',
+        ]);
+        $responseDetail->assertSeeInOrder([
+            '備考',
+            '修正テスト1',
+        ]);
+    }
+
+    // 管理者 修正申請の承認処理が正しく行われる
+    public function test_admin_correction_approve_exec()
+    {
+        // 固定日時を設定（テスト用）
+        $fixedNow = Carbon::parse('2025-11-30 20:00:00', 'Asia/Tokyo');
+        Carbon::setTestNow($fixedNow);
+
+        // 管理者登録
+        $admin = Admin::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@test.com',
+            'password' => bcrypt('12345678'),
+        ]);
+
+        // ユーザー登録
+        $user1 = User::factory()->create([
+            'name' => '山田 太郎',
+            'email' => 'test1@example.com',
+            'password' => bcrypt('password1'),
+        ]);
+
+        // 出退勤情報を登録
+        $attendance1 = Attendance::factory()->create([
+            'user_id' => $user1->id,
+            'work_date' => '2025-11-01',
+            'clock_in' => '09:00:00',
+            'clock_out' => '18:00:00',
+            'working_hours' => '08:00:00',
+            'total_break' => '01:00:00',
+            'status' => 'completed',
+        ]);
+
+        // 修正申請登録
+        $attendance_correction1 = AttendanceCorrection::factory()->create([
+            'user_id' => $user1->id,
+            'attendance_id' => $attendance1->id,
+            'clock_in_correction' => '10:00:00',
+            'clock_out_correction' => '17:30:00',
+            'reason_correction' => '修正テスト1',
+            'approval_status' => 'pending',
+            'requested_date' => now()->toDateString(),
+        ]);
+
+        // 修正休憩申請登録
+        $break_correction1 = BreakCorrection::factory()->create([
+            'attendance_correction_id' => $attendance_correction1->id,
+            'break_start_correction' => '11:00:00',
+            'break_end_correction' => '11:30:00',
+        ]);
+
+        $id = $attendance_correction1->id;
+
+        // 管理者認証で修正申請詳細をリクエスト
+        $responseDetail = $this->actingAs($admin, 'admin')
+            ->get("/admin/stamp_correction_request/approve/{$id}");
+
+
+        $postData = [
+            'attendance_correct_request_id' => $attendance_correction1->id,
+            'clock_in' => $attendance_correction1->clock_in_correction,
+            'clock_out' => $attendance_correction1->clock_out_correction,
+            'breaks' => [
+                [
+                    'break_start' => $break_correction1->break_start_correction,
+                    'break_end' => $break_correction1->break_end_correction
+                ],
+            ],
+            'reason' => $attendance_correction1->reason_correction,
+        ];
+
+        $responsePost = $this->actingAs($admin, 'admin')
+            ->post("/admin/stamp_correction_request/approve/exec", $postData);
+
+        // ステータスは 302 で OK
+        $responsePost->assertStatus(302);
+
+        // Attendanceに登録されたか
+        $this->assertDatabaseHas('attendances', [
+            'id' => $attendance1->id,
+            'clock_in' => '10:00:00',
+            'clock_out' => '17:30:00',
+            'working_hours' => '07:00:00',  // 8時間 ⇒7時間
+            'total_break' => '00:30:00', // 1時間 ⇒30分
+            'reason' => '修正テスト1',
+        ]);
+
+        // Breaksに登録されたか
+        $this->assertDatabaseHas('breaks', [
+            'attendance_id' => $attendance1->id,
+            'break_start' => '11:00:00',
+            'break_end' => '11:30:00',
+            'break_hours' => '00:30:00', // 30分
+            'break_seconds' => 1800, // 30分
+        ]);
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Carbon\Carbon;
 
+// ID 14. ユーザー情報取得機能（管理者）
 class AdminStaffListTest extends TestCase
 {
     use RefreshDatabase;
@@ -169,7 +170,7 @@ class AdminStaffListTest extends TestCase
         ]);
     }
 
-    // ユーザーの先月の勤怠情報を表示
+    // ユーザーの前月の勤怠情報を表示
     public function test_admin_attendance_staff_prev_list()
     {
         // 固定日時を設定（テスト用）
