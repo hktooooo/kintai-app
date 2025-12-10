@@ -117,23 +117,23 @@ MAIL_FROM_NAME="${APP_NAME}"
 name: 西 伶奈
 email: reina.n@coachtech.com
 password: password1
-
+-------------------------
 name: 山田 太郎
 email: taro.y@coachtech.com
 password: password2
-
+-------------------------
 name: 増田 一世
 email: issei.m@coachtech.com
 password: password3
-
+-------------------------
 name: 山本 敬吉
 email: keikichi.y@coachtech.com
 password: password4
-
+-------------------------
 name: 秋田 朋美
 email: tomomi.a@coachtech.com
 password: password5
-
+-------------------------
 name: 中西 教夫
 email: norio.n@coachtech.com
 password: password6
