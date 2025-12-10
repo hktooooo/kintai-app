@@ -9,7 +9,7 @@ make init
 ```
 
 ## SQLデータ
-.envファイルに以下の環境変数を記載ください<br>
+.envファイルの環境変数は以下になります<br>
 ``` text
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -21,7 +21,7 @@ DB_PASSWORD=laravel_pass
 
 ## メール認証
 mailHogを使用しています。<br>
-.envファイルに以下の環境変数を記載ください<br>
+.envファイルの環境変数は以下になります<br>
 
 ``` text
 MAIL_MAILER=smtp
