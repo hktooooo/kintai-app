@@ -146,8 +146,8 @@ password: 12345678
 勤怠情報の例として、西 伶奈さんの2025年11月分勤怠と11月3日に 3名分の勤怠が登録されています。<br>
 
 ## PHPUnitを利用したテストに関して
-以下のコマンドを実行:  
-```
+以下のコマンドを順に実行:  
+```text
 //MySQLコンテナ上でテスト用データベースの作成
 docker-compose exec mysql bash
 
@@ -155,7 +155,7 @@ docker-compose exec mysql bash
 mysql -u root -p
 
 //パスワードはrootと入力
-CREATE DATEBASE demo_test;
+CREATE DATABASE demo_test;
 SHOW DATABASES;
 
 SHOW DATABASES;入力後、demo_testが作成されていれば成功
@@ -165,17 +165,23 @@ exitでコンテナを抜ける
 docker-compose exec php bash
 cp .env .env.testing
 
-//※コマンドでファイル権限を与える必要がある
+//※Windows WSL環境下では、PHPコンテナ出て下記コマンドでファイル権限を与える必要がある
 sudo chown -R $USER:$USER src/
 
 .env.testingを以下の環境変数に書き換えをする
+
+// 「空」にしたAPP_KEYに新たなテスト用のアプリケーションキーを加える
+php artisan key:generate --env=testing
 
 // キャッシュのクリアとマイグレーションコマンドの実行
 php artisan config:clear
 php artisan migrate:fresh --env=testing
 
-vendor/bin/phpunit tests/Feature/ファイル名.phpで
-テストの実行ができます
+vendor/bin/phpunit tests/Feature/ファイル名.php
+でテストの実行ができます
+
+注:"AttendanceBreakTest.php"は休止時間 60secを
+休憩時間として記録できるかテストするため実行時間が長くなります
 ```
 
 .env.testingファイルの環境変数は以下になります<br>
@@ -192,7 +198,6 @@ DB_PORT=3306
 DB_DATABASE=demo_test
 DB_USERNAME=root
 DB_PASSWORD=root
-
 ```
 
 ## 使用技術(実行環境)
