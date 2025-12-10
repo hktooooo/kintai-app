@@ -146,17 +146,53 @@ password: 12345678
 勤怠情報の例として、西 伶奈さんの2025年11月分勤怠と11月3日に 3名分の勤怠が登録されています。<br>
 
 ## PHPUnitを利用したテストに関して
-以下のコマンド:  
+以下のコマンドを実行:  
 ```
-//テスト用データベースの作成
+//MySQLコンテナ上でテスト用データベースの作成
 docker-compose exec mysql bash
-mysql -u root -p
-//パスワードはrootと入力
-create database test_database;
 
+//MySQLコンテナ上
+mysql -u root -p
+
+//パスワードはrootと入力
+CREATE DATEBASE demo_test;
+SHOW DATABASES;
+
+SHOW DATABASES;入力後、demo_testが作成されていれば成功
+exitでコンテナを抜ける
+
+//テスト用の.envファイル作成
 docker-compose exec php bash
+cp .env .env.testing
+
+//※コマンドでファイル権限を与える必要がある
+sudo chown -R $USER:$USER src/
+
+.env.testingを以下の環境変数に書き換えをする
+
+// キャッシュのクリアとマイグレーションコマンドの実行
+php artisan config:clear
 php artisan migrate:fresh --env=testing
-./vendor/
+
+vendor/bin/phpunit tests/Feature/ファイル名.phpで
+テストの実行ができます
+```
+
+.env.testingファイルの環境変数は以下になります<br>
+``` text
+APP_NAME=Laravel
+APP_ENV=test
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=demo_test
+DB_USERNAME=root
+DB_PASSWORD=root
+
 ```
 
 ## 使用技術(実行環境)
