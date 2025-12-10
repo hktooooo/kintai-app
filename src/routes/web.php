@@ -15,24 +15,6 @@ Route::get('/email/verify', [AuthController::class, 'verifyNotice'])->middleware
 Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
 Route::post('/email/resend', [AuthController::class, 'resendVerification'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-// 管理者ログイン
-Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'show_admin_login'])->name('admin.login')->middleware('guest:admin');
-    Route::post('/login', [AdminLoginController::class, 'login'])->middleware('guest:admin');
-    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
-
-    Route::middleware('auth:admin')->group(function () {
-        Route::get('/attendance/list', [AdminAttendanceController::class, 'adminShowList'])->name('admin.list');
-        Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'adminShowDetail'])->name('admin.detail');
-        Route::post('/attendance/detail/correction', [AdminAttendanceController::class, 'adminDetailCorrection'])->name('admin.detail.correction');
-        Route::get('/staff/list', [AdminAttendanceController::class, 'showStaffList']);
-        Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'showAttendanceStaffList'])->name('admin.attendance_staff_list');
-        Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminAttendanceController::class, 'approveCorrectRequest'])->name('admin.approve_correct_request');
-        Route::post('/stamp_correction_request/approve/exec', [AdminAttendanceController::class, 'approveCorrectRequestExec'])->name('admin.approve_correct_request_exec');
-        Route::get('/attendance/staff/{id}/export_csv', [AdminAttendanceController::class, 'exportAttendanceCsv'])->name('attendance.export.csv');
-    });
-});
-
 // 一般ユーザーログイン
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'showMain'])->name('home');
@@ -49,4 +31,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // 管理者、一般ユーザー両方からアクセス
 Route::middleware('auth.web_or_admin')->group(function () {
     Route::get('/stamp_correction_request/list', [AttendanceController::class, 'showStampList'])->name('stamp_list');
+});
+
+// 管理者ログイン
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminLoginController::class, 'show_admin_login'])->name('admin.login')->middleware('guest:admin');
+    Route::post('/login', [AdminLoginController::class, 'login'])->middleware('guest:admin');
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/attendance/list', [AdminAttendanceController::class, 'adminShowList'])->name('admin.list');
+        Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'adminShowDetail'])->name('admin.detail');
+        Route::post('/attendance/detail/correction', [AdminAttendanceController::class, 'adminDetailCorrection'])->name('admin.detail.correction');
+        Route::get('/staff/list', [AdminAttendanceController::class, 'showStaffList']);
+        Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'showAttendanceStaffList'])->name('admin.attendance_staff_list');
+        Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminAttendanceController::class, 'approveCorrectRequest'])->name('admin.approve_correct_request');
+        Route::post('/stamp_correction_request/approve/exec', [AdminAttendanceController::class, 'approveCorrectRequestExec'])->name('admin.approve_correct_request_exec');
+        Route::get('/attendance/staff/{id}/export_csv', [AdminAttendanceController::class, 'exportAttendanceCsv'])->name('attendance.export.csv');
+        Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+    });
 });

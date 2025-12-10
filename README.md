@@ -62,13 +62,13 @@ MAIL_FROM_NAME="${APP_NAME}"
 | カラム名 | 型 | primary key | unique key | not null | foreign key |
 | --- | --- | --- | --- | --- | --- |
 | id | bigint | ◯ |  | ◯ |  |
-| user_id | bigint |  |  | 〇 | users(id) |
-| work_date | date |  |  |  |  |
+| user_id | bigint |  |  | ◯ | users(id) |
+| work_date | date |  |  | ◯ |  |
 | clock_in | time |  |  |  |  |
 | clock_out | time |  |  |  |  |
 | working_hours | time |  |  |  |  |
 | total_break | time |  |  |  |  |
-| status | string |  |  |  |  |
+| status | string |  |  | ◯ |  |
 | reason | text |  |  |  |  |
 | created_at | timestamp |  |  |  |  |
 | updated_at | timestamp |  |  |  |  |
@@ -89,10 +89,24 @@ MAIL_FROM_NAME="${APP_NAME}"
 | カラム名 | 型 | primary key | unique key | not null | foreign key |
 | --- | --- | --- | --- | --- | --- |
 | id | bigint | ◯ |  | ◯ |  |
-| user_id | bigint |  |  | 〇 | users(id) |
-| attendance_id | bigint |  |  | 〇 | attendances(id) |
-| requested_date | date |  |  |  |  |
-| approval_status | string |  |  |  |  |
+| user_id | bigint |  |  | ◯ | users(id) |
+| attendance_id | bigint |  |  | ◯ | attendances(id) |
+| clock_in_correction | time |  |  |  |  |
+| clock_out_correction | time |  |  |  |  |
+| requested_date | date |  |  | ◯ |  |
+| approval_status | string |  |  | ◯ |  |
+| reason_correction | string |  |  |  |  |
+| created_at | timestamp |  |  |  |  |
+| updated_at | timestamp |  |  |  |  |
+
+### break_correctionsテーブル
+| カラム名 | 型 | primary key | unique key | not null | foreign key |
+| --- | --- | --- | --- | --- | --- |
+| id | bigint | ◯ |  | ◯ |  |
+| attendance_correction_id | bigint |  |  | 〇 | attendances(id) |
+| break_id | bigint |  |  |  | breaks(id) |
+| break_start_correction | time |  |  |  |  |
+| break_end_correction | time |  |  |  |  |
 | created_at | timestamp |  |  |  |  |
 | updated_at | timestamp |  |  |  |  |
 
@@ -100,18 +114,50 @@ MAIL_FROM_NAME="${APP_NAME}"
 ![alt](ER.png)
 
 ## テストアカウント
-name: 一般ユーザ
-email: test@test.com  
-password: 12345678  
+name: 西 伶奈
+email: reina.n@coachtech.com
+password: password1
+
+name: 山田 太郎
+email: taro.y@coachtech.com
+password: password2
+
+name: 増田 一世
+email: issei.m@coachtech.com
+password: password3
+
+name: 山本 敬吉
+email: keikichi.y@coachtech.com
+password: password4
+
+name: 秋田 朋美
+email: tomomi.a@coachtech.com
+password: password5
+
+name: 中西 教夫
+email: norio.n@coachtech.com
+password: password6
 -------------------------
 name: 管理者
 email: admin@test.com  
 password: 12345678  
 -------------------------
+<br>
+勤怠情報の例として、西 伶奈さんの2025年11月分勤怠と11月3日に 3名分の勤怠が登録されています。<br>
 
 ## PHPUnitを利用したテストに関して
-～あとで記載する～<br>
+以下のコマンド:  
+```
+//テスト用データベースの作成
+docker-compose exec mysql bash
+mysql -u root -p
+//パスワードはrootと入力
+create database test_database;
 
+docker-compose exec php bash
+php artisan migrate:fresh --env=testing
+./vendor/
+```
 
 ## 使用技術(実行環境)
 - PHP8.2.29
