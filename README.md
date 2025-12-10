@@ -9,7 +9,7 @@ make init
 ```
 
 ## SQLデータ
-.envファイルに以下の環境変数を記載ください<br>
+.envファイルの環境変数は以下になります<br>
 ``` text
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -21,7 +21,7 @@ DB_PASSWORD=laravel_pass
 
 ## メール認証
 mailHogを使用しています。<br>
-.envファイルに以下の環境変数を記載ください<br>
+.envファイルの環境変数は以下になります<br>
 
 ``` text
 MAIL_MAILER=smtp
@@ -114,31 +114,31 @@ MAIL_FROM_NAME="${APP_NAME}"
 ![alt](ER.png)
 
 ## テストアカウント
-name: 西 伶奈
-email: reina.n@coachtech.com
+name: 西 伶奈  
+email: reina.n@coachtech.com  
 password: password1
-
-name: 山田 太郎
-email: taro.y@coachtech.com
+-------------------------
+name: 山田 太郎  
+email: taro.y@coachtech.com  
 password: password2
-
-name: 増田 一世
-email: issei.m@coachtech.com
+-------------------------
+name: 増田 一世  
+email: issei.m@coachtech.com  
 password: password3
-
-name: 山本 敬吉
-email: keikichi.y@coachtech.com
+-------------------------
+name: 山本 敬吉  
+email: keikichi.y@coachtech.com  
 password: password4
-
-name: 秋田 朋美
-email: tomomi.a@coachtech.com
+-------------------------
+name: 秋田 朋美  
+email: tomomi.a@coachtech.com  
 password: password5
-
-name: 中西 教夫
-email: norio.n@coachtech.com
+-------------------------
+name: 中西 教夫  
+email: norio.n@coachtech.com  
 password: password6
 -------------------------
-name: 管理者
+name: 管理者  
 email: admin@test.com  
 password: 12345678  
 -------------------------
