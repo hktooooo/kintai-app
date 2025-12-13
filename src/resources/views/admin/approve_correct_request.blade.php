@@ -7,12 +7,12 @@
 @section('content')
 <div class="approve__content">
     <h1 class="approve__header">勤怠詳細</h1>
-
     @php
         // 承認待ちかどうか
         $isPending = $attendance_correction->approval_status === 'pending';
-
-        [$last_name, $first_name] = explode(' ', $attendance_correction->user->name);
+        $nameParts = explode(' ', $attendance_correction->user->name);
+        $last_name = $nameParts[0] ?? '';
+        $first_name = $nameParts[1] ?? '';
         [$year, $month_day] = explode(' ', $attendance_correction->attendance->work_date_japanese);
     @endphp
 
