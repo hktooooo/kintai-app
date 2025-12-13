@@ -195,9 +195,6 @@ php artisan migrate:fresh --env=testing
 
 ./vendor/bin/phpunit tests/Feature/ファイル名.php
 で各テスト実行ができます
-
-注:"AttendanceBreakTest.php"は休止時間 1分(60sec)を
-   休憩時間として記録し表示できるかテストするため、実行待ち時間があります
 ```
 
 ## 使用技術(実行環境)
