@@ -44,8 +44,8 @@ class AdminDetailCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -54,8 +54,7 @@ class AdminDetailCorrectionTest extends TestCase
             'attendance_id' => $attendance->id,
             'break_start' => '12:00:00',
             'break_end' => '13:00:00',
-            'break_hours' => '01:00:00',
-            'break_seconds' => '3600',
+            'break_seconds' => 1 * 60 * 60,
         ]);
 
         $id = $attendance -> id;
@@ -123,8 +122,8 @@ class AdminDetailCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -180,8 +179,8 @@ class AdminDetailCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -247,8 +246,8 @@ class AdminDetailCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -314,8 +313,8 @@ class AdminDetailCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 

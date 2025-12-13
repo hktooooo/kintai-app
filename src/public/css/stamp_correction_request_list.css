@@ -57,6 +57,7 @@ table {
     font-weight: 700;
     letter-spacing: 0.15em;
     color: #737373;
+    table-layout: fixed;
 }
 
 .stamp__list__row th {
@@ -102,6 +103,7 @@ table {
 .stamp__list__data:nth-child(4) {
     width: auto;
     text-align: left;
+    padding-right: 18px;
 }
 
 .stamp__list__label:nth-child(5),
@@ -114,4 +116,12 @@ table {
 .stamp__list__data:last-child {
     width: 122px;
     text-align: left;
+}
+
+.ellipsis {
+    max-width: 180px;
+    /* 好きな幅 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

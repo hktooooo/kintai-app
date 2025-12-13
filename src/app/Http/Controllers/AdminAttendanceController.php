@@ -87,18 +87,9 @@ class AdminAttendanceController extends Controller
                     $seconds = $start->diffInSeconds($end);
                     $totalBreakSeconds += $seconds;
 
-                    // 時・分・秒に分解
-                    //$hours = floor($seconds / 3600);
-                    //$minutes = floor(($seconds % 3600) / 60);
-                    //$secs = $seconds % 60;
-
-                    // HH:MM:SS に整形
-                    //$break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
-
                     $break_time->update([
                         'break_start' => $breakInput['break_start'],
                         'break_end'   => $breakInput['break_end'],
-                        //'break_hours' => $break_hours,
                         'break_seconds' => $seconds,
                     ]);
                 }
@@ -114,19 +105,10 @@ class AdminAttendanceController extends Controller
                     $seconds = $start->diffInSeconds($end);
                     $totalBreakSeconds += $seconds;
 
-                    // 時・分・秒に分解
-                    //$hours = floor($seconds / 3600);
-                    //$minutes = floor(($seconds % 3600) / 60);
-                    //$secs = $seconds % 60;
-
-                    // HH:MM:SS に整形
-                    //$break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
-
                     BreakTime::create([
                         'attendance_id' => $attendance->id, // 必須：どの勤怠に属するか
                         'break_start'   => $breakInput['break_start'],
                         'break_end'     => $breakInput['break_end'],
-                        //'break_hours' => $break_hours,
                         'break_seconds' => $seconds,
                     ]);
                 }
@@ -143,16 +125,8 @@ class AdminAttendanceController extends Controller
         // 休憩時間を引く
         $workingSeconds -= $totalBreakSeconds;
 
-        // HH:MM:SS に整形
-        //$total_hours = floor($totalBreakSeconds / 3600);
-        //$total_minutes = floor(($totalBreakSeconds % 3600) / 60);
-        //$total_secs = $totalBreakSeconds % 60;
-
         $attendance->total_break_seconds = $totalBreakSeconds;
-      
-        //$hours = floor($workingSeconds / 3600);
-        //$minutes = floor(($workingSeconds % 3600) / 60);
-        //$secs = $workingSeconds % 60;        
+
         $attendance->working_seconds = $workingSeconds;
 
         // 保存
@@ -261,11 +235,6 @@ class AdminAttendanceController extends Controller
             $end = Carbon::parse($breakInput['break_end']);
             $seconds = $start->diffInSeconds($end);
             $totalBreakSeconds += $seconds;
-
-            //$hours = floor($seconds / 3600);
-            //$minutes = floor(($seconds % 3600) / 60);
-            //$secs = $seconds % 60;
-            //$break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
 
             // break_id が存在する → 既存休憩を更新
             if (!empty($breakInput['break_id'])) {

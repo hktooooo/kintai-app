@@ -9,7 +9,7 @@ make init
 ```
 
 ## SQLデータ
-.envファイルの環境変数は以下になります<br>
+.envファイルの環境変数は以下となっています<br>
 ``` text
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -21,8 +21,7 @@ DB_PASSWORD=laravel_pass
 
 ## メール認証
 mailHogを使用しています。<br>
-.envファイルの環境変数は以下になります<br>
-
+.envファイルの環境変数は以下となっています<br>
 ``` text
 MAIL_MAILER=smtp
 MAIL_HOST=mailhog
@@ -66,8 +65,8 @@ MAIL_FROM_NAME="${APP_NAME}"
 | work_date | date |  |  | ◯ |  |
 | clock_in | time |  |  |  |  |
 | clock_out | time |  |  |  |  |
-| working_hours | time |  |  |  |  |
-| total_break | time |  |  |  |  |
+| working_seconds | bigint  |  |  |  |  |
+| total_break_seconds | bigint  |  |  |  |  |
 | status | string |  |  | ◯ |  |
 | reason | text |  |  |  |  |
 | created_at | timestamp |  |  |  |  |
@@ -80,8 +79,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 | attendance_id | bigint |  |  | 〇 | attendances(id) |
 | break_start | time |  |  |  |  |
 | break_end | time |  |  |  |  |
-| break_hours | time |  |  |  |  |
-| break_seconds | integer |  |  |  |  |
+| break_seconds | bigint |  |  |  |  |
 | created_at | timestamp |  |  |  |  |
 | updated_at | timestamp |  |  |  |  |
 
@@ -111,9 +109,9 @@ MAIL_FROM_NAME="${APP_NAME}"
 | updated_at | timestamp |  |  |  |  |
 
 ## ER図
-![alt](ER.png)
+![alt](erd.png)
 
-## テストアカウント
+## テストユーザーアカウント
 name: 西 伶奈  
 email: reina.n@coachtech.com  
 password: password1
@@ -138,12 +136,16 @@ name: 中西 教夫
 email: norio.n@coachtech.com  
 password: password6
 -------------------------
-name: 管理者  
+
+## テスト管理者アカウント
+name: admin 
 email: admin@test.com  
-password: 12345678  
+password: 12345678
 -------------------------
 <br>
-勤怠情報の例として、西 伶奈さんの2025年11月分勤怠と11月3日に 3名分の勤怠が登録されています。<br>
+勤怠情報の例として、西 伶奈さんの2025年11月の1ヵ月分勤怠と<br>
+11月3日に全メンバー 6名分の勤怠が登録されています。<br>
+管理者側の確認は adminを使ってください<br>
 
 ## PHPUnitを利用したテストに関して
 以下のコマンドを順に実行:  
@@ -165,11 +167,25 @@ exitでコンテナを抜ける
 docker-compose exec php bash
 cp .env .env.testing
 
-//※Windows WSL環境下では、PHPコンテナ出て下記コマンドでファイル権限を与える必要がある
+//※Windows WSL環境下では、PHPコンテナ抜けてから下記コマンドでファイル権限を与える必要がある
 sudo chown -R $USER:$USER src/
 
-.env.testingを以下の環境変数に書き換えをする
+.env.testingの以下の環境変数を書き換える
 
+    APP_NAME=Laravel
+    APP_ENV=test
+    APP_KEY=
+    APP_DEBUG=true
+    APP_URL=http://localhost
+
+    DB_CONNECTION=mysql
+    DB_HOST=mysql
+    DB_PORT=3306
+    DB_DATABASE=demo_test
+    DB_USERNAME=root
+    DB_PASSWORD=root
+
+// 以下を PHPコンテナ内で実行 (docker-compose exec php bashでコンテナに入る)
 // 「空」にしたAPP_KEYに新たなテスト用のアプリケーションキーを加える
 php artisan key:generate --env=testing
 
@@ -177,27 +193,11 @@ php artisan key:generate --env=testing
 php artisan config:clear
 php artisan migrate:fresh --env=testing
 
-vendor/bin/phpunit tests/Feature/ファイル名.php
-でテストの実行ができます
+./vendor/bin/phpunit tests/Feature/ファイル名.php
+で各テスト実行ができます
 
-注:"AttendanceBreakTest.php"は休止時間 60secを
-休憩時間として記録できるかテストするため実行時間が長くなります
-```
-
-.env.testingファイルの環境変数は以下になります<br>
-``` text
-APP_NAME=Laravel
-APP_ENV=test
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost
-
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=demo_test
-DB_USERNAME=root
-DB_PASSWORD=root
+注:"AttendanceBreakTest.php"は休止時間 1分(60sec)を
+   休憩時間として記録し表示できるかテストするため、実行待ち時間があります
 ```
 
 ## 使用技術(実行環境)

@@ -100,8 +100,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -110,8 +110,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-11-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -120,8 +120,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-11-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -143,8 +143,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // 11/2の勤怠
@@ -154,8 +154,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // 11/3の勤怠
@@ -165,8 +165,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -197,8 +197,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-10-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -207,8 +207,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-10-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -217,8 +217,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-10-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -243,8 +243,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // 10/2の勤怠
@@ -254,8 +254,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // 10/3の勤怠
@@ -265,8 +265,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -297,8 +297,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-12-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -307,8 +307,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-12-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -317,8 +317,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-12-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -343,8 +343,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // 12/2の勤怠
@@ -354,8 +354,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // 12/3の勤怠
@@ -365,8 +365,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -397,8 +397,8 @@ class AdminStaffListTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
         
@@ -420,8 +420,8 @@ class AdminStaffListTest extends TestCase
             $formattedDate, 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         $attendance_id = $attendance1 -> id;

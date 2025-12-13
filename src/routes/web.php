@@ -6,9 +6,12 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminAttendanceController;
 
-Route::get('/register', [AuthController::class, 'show_register']);
-Route::post('/register', [AuthController::class, 'store_user']);
-Route::post('/login', [AuthController::class, 'login']);
+// ログイン前
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister']);
+    Route::post('/register', [AuthController::class, 'storeUser']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 // メール認証
 Route::get('/email/verify', [AuthController::class, 'verifyNotice'])->middleware('auth')->name('verification.notice');
@@ -22,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/clock_out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
     Route::post('/attendance/break_start', [AttendanceController::class, 'breakStart'])->name('attendance.breakStart');
     Route::post('/attendance/break_end', [AttendanceController::class, 'breakEnd'])->name('attendance.breakEnd');
-    Route::get('/attendance/list', [AttendanceController::class, 'show_list'])->name('attendance_list');
+    Route::get('/attendance/list', [AttendanceController::class, 'showList'])->name('attendance_list');
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'showDetail'])->name('attendance.detail');
     Route::post('/attendance/detail/correction', [AttendanceController::class, 'submitDetailCorrection'])->name('submit.detail.correction');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -35,7 +38,7 @@ Route::middleware('auth.web_or_admin')->group(function () {
 
 // 管理者ログイン
 Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'show_admin_login'])->name('admin.login')->middleware('guest:admin');
+    Route::get('/login', [AdminLoginController::class, 'showAdminLogin'])->name('admin.login')->middleware('guest:admin');
     Route::post('/login', [AdminLoginController::class, 'login'])->middleware('guest:admin');
 
     Route::middleware('auth:admin')->group(function () {
