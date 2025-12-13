@@ -15,20 +15,14 @@ class CurrentTest extends TestCase
     //現在の時刻が表示されているか
     public function test_login_user()
     {
-        // ユーザー登録・ログイン・メール認証
+        Carbon::setTestNow('2025-11-30 09:00:00');
+
         $user = User::factory()->create([
-            'name' => 'test_user',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password1'),
             'email_verified_at' => now(),
         ]);
-        $this->actingAs($user);
 
-        // ログインしてリダイレクト先まで追従
-        $response = $this->followingRedirects()->post('/login', [
-            'email' => 'test@example.com',
-            'password' => 'password1',
-        ]);
+        // ログイン状態を作る
+        $response = $this->actingAs($user)->get('/attendance');
 
         $this->assertAuthenticatedAs($user);
 
@@ -40,7 +34,6 @@ class CurrentTest extends TestCase
         $response->assertSee($formattedDate);
 
         // 時間が画面に表示されているか確認
-        $time = Carbon::now()->format('H:i');
-        $response->assertSee($time);
+        $response->assertSee('09:00');
     }
 }
