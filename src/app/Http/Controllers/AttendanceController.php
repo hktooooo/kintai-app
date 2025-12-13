@@ -106,25 +106,11 @@ class AttendanceController extends Controller
         $seconds = $start->diffInSeconds($end);
 
         // 休憩時間の合計を取得
-        $total_break = $attendance->total_break ?? '00:00:00'; // HH:MM:SS 文字列
-
-        // 秒に変換
-        if ($total_break) {
-            $parts = explode(':', $total_break);
-            $total_break_seconds = ($parts[0] * 3600) + ($parts[1] * 60) + $parts[2];
-        } else {
-            $total_break_seconds = 0;
-        }
+        $total_break_seconds = $attendance->total_break_seconds ?? 0; // 初期値 0
 
         $seconds -= $total_break_seconds;
 
-        // 時・分・秒に分解
-        $hours = floor($seconds / 3600);
-        $minutes = floor(($seconds % 3600) / 60);
-        $secs = $seconds % 60;
-
-        // HH:MM:SS に整形
-        $attendance->working_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
+        $attendance->working_seconds = $seconds;
 
         // 保存
         $attendance->save(); 
@@ -192,14 +178,6 @@ class AttendanceController extends Controller
         // 秒差
         $seconds = $start->diffInSeconds($end);
 
-        // 時・分・秒に分解
-        $hours = floor($seconds / 3600);
-        $minutes = floor(($seconds % 3600) / 60);
-        $secs = $seconds % 60;
-
-        // HH:MM:SS に整形
-        $break_time->break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
-
         // トータル時間を更新
         $break_time->break_seconds = $seconds;
 
@@ -208,12 +186,7 @@ class AttendanceController extends Controller
 
         $totalBreakSeconds = $attendance->breaks->sum('break_seconds');
 
-        // 時・分・秒に分解
-        $total_hours = floor($totalBreakSeconds / 3600);
-        $total_minutes = floor(($totalBreakSeconds % 3600) / 60);
-        $total_secs = $totalBreakSeconds % 60;
-
-        $attendance->total_break = sprintf('%02d:%02d:%02d', $total_hours, $total_minutes, $total_secs);
+        $attendance->total_break_seconds = $totalBreakSeconds;
 
         // 出席を保存
         $attendance->save(); 
@@ -222,7 +195,7 @@ class AttendanceController extends Controller
     }
     
     // 勤怠一覧の表示
-    public function show_list(Request $request)
+    public function showList(Request $request)
     {
         // 現在ログインしているユーザーID
         $userId = Auth::id();
@@ -259,6 +232,7 @@ class AttendanceController extends Controller
             $attendanceForDate = $attendances->first(function ($att) use ($date) {
                 return Carbon::parse($att->work_date)->isSameDay($date);
             });
+
             $attendancesByDate[$date->toDateString()] = $attendanceForDate;
         }
 

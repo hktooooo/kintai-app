@@ -87,18 +87,9 @@ class AdminAttendanceController extends Controller
                     $seconds = $start->diffInSeconds($end);
                     $totalBreakSeconds += $seconds;
 
-                    // 時・分・秒に分解
-                    $hours = floor($seconds / 3600);
-                    $minutes = floor(($seconds % 3600) / 60);
-                    $secs = $seconds % 60;
-
-                    // HH:MM:SS に整形
-                    $break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
-
                     $break_time->update([
                         'break_start' => $breakInput['break_start'],
                         'break_end'   => $breakInput['break_end'],
-                        'break_hours' => $break_hours,
                         'break_seconds' => $seconds,
                     ]);
                 }
@@ -114,19 +105,10 @@ class AdminAttendanceController extends Controller
                     $seconds = $start->diffInSeconds($end);
                     $totalBreakSeconds += $seconds;
 
-                    // 時・分・秒に分解
-                    $hours = floor($seconds / 3600);
-                    $minutes = floor(($seconds % 3600) / 60);
-                    $secs = $seconds % 60;
-
-                    // HH:MM:SS に整形
-                    $break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
-
                     BreakTime::create([
                         'attendance_id' => $attendance->id, // 必須：どの勤怠に属するか
                         'break_start'   => $breakInput['break_start'],
                         'break_end'     => $breakInput['break_end'],
-                        'break_hours' => $break_hours,
                         'break_seconds' => $seconds,
                     ]);
                 }
@@ -143,16 +125,9 @@ class AdminAttendanceController extends Controller
         // 休憩時間を引く
         $workingSeconds -= $totalBreakSeconds;
 
-        // HH:MM:SS に整形
-        $total_hours = floor($totalBreakSeconds / 3600);
-        $total_minutes = floor(($totalBreakSeconds % 3600) / 60);
-        $total_secs = $totalBreakSeconds % 60;
-        $attendance->total_break = sprintf('%02d:%02d:%02d', $total_hours, $total_minutes, $total_secs);
-      
-        $hours = floor($workingSeconds / 3600);
-        $minutes = floor(($workingSeconds % 3600) / 60);
-        $secs = $workingSeconds % 60;        
-        $attendance->working_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
+        $attendance->total_break_seconds = $totalBreakSeconds;
+
+        $attendance->working_seconds = $workingSeconds;
 
         // 保存
         $attendance->save();
@@ -261,11 +236,6 @@ class AdminAttendanceController extends Controller
             $seconds = $start->diffInSeconds($end);
             $totalBreakSeconds += $seconds;
 
-            $hours = floor($seconds / 3600);
-            $minutes = floor(($seconds % 3600) / 60);
-            $secs = $seconds % 60;
-            $break_hours = sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
-
             // break_id が存在する → 既存休憩を更新
             if (!empty($breakInput['break_id'])) {
                 $break_time = BreakTime::find($breakInput['break_id']);
@@ -273,7 +243,7 @@ class AdminAttendanceController extends Controller
                     $break_time->update([
                         'break_start' => $breakInput['break_start'],
                         'break_end'   => $breakInput['break_end'],
-                        'break_hours' => $break_hours,
+                        //'break_hours' => $break_hours,
                         'break_seconds' => $seconds,
                     ]);
                 }
@@ -285,7 +255,7 @@ class AdminAttendanceController extends Controller
                     'attendance_id' => $attendance->id, // 必須：どの勤怠に属するか
                     'break_start'   => $breakInput['break_start'],
                     'break_end'     => $breakInput['break_end'],
-                    'break_hours' => $break_hours,
+                    //'break_hours' => $break_hours,
                     'break_seconds' => $seconds,
                 ]);
             }
@@ -299,9 +269,9 @@ class AdminAttendanceController extends Controller
         // 休憩時間を引く
         $workingSeconds -= $totalBreakSeconds;
 
-        // 勤務時間と休憩時間を HH:MM:SS に整形
-        $attendance->total_break = gmdate('H:i:s', $totalBreakSeconds);
-        $attendance->working_hours = gmdate('H:i:s', $workingSeconds);
+        // 勤務時間と休憩時間を登録
+        $attendance->total_break_seconds = $totalBreakSeconds;
+        $attendance->working_seconds = $workingSeconds;
 
         // 出席を保存
         $attendance->save();
@@ -348,26 +318,16 @@ class AdminAttendanceController extends Controller
                     foreach ($rows as $row) {
 
                         // ---- ユーザ名取得 ----
-                        $userName = $row->user ? $row->user->name : '未設定';
+                        $userName = $row->user?->name ?? '未設定';
 
-                        // ---- 日付のみへ変換 ----
-                        $workDate = $row->work_date
-                            ? date('Y-m-d', strtotime($row->work_date))
-                            : null;
+                        // ---- 日付の変換 ----
+                        $workDate = $row->work_date?->format('Y-m-d');
 
-                        // ---- 時間のみへ変換 ----
-                        $clockIn = $row->clock_in
-                            ? date('H:i', strtotime($row->clock_in))
-                            : null;
-                        $clockOut = $row->clock_out
-                            ? date('H:i', strtotime($row->clock_out))
-                            : null;
-                        $totalBreak = $row->total_break
-                            ? date('H:i', strtotime($row->total_break))
-                            : null;
-                        $workingHours = $row->working_hours
-                            ? date('H:i', strtotime($row->working_hours))
-                            : null;
+                        // ---- 時間の変換 ----
+                        $clockIn  = $row->clock_in?->format('H:i');
+                        $clockOut = $row->clock_out?->format('H:i');
+                        $totalBreak   = $row->total_break_hi;
+                        $workingHours = $row->working_hours_hi;
                     
                         // CSV行
                         $csvRow = [

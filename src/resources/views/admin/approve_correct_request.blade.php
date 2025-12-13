@@ -42,7 +42,7 @@
                     </div>
                 </td>
             </tr>
-            @foreach ($break_time_corrections as $break_time)
+            @foreach ($break_time_corrections as $break_time_correction)
                 <tr class="approve__row">
                     <th class="approve__label">
                         休憩
@@ -51,11 +51,11 @@
                         @endif
                     </th>
                     <td class="approve__data">
-                        <input type="hidden" name="breaks[{{ $break_time->id }}][id]" value="{{ $break_time->id }}" readonly>
+                        <input type="hidden" name="breaks[{{ $break_time_correction->id }}][break_id]" value="{{ $break_time_correction->break_id }}" readonly>
                         <div class="detail__time">
-                            <input type="text" name="breaks[{{ $break_time->id }}][break_start]" value="{{ $break_time->break_start_correction_formatted }}" readonly>
+                            <input type="text" name="breaks[{{ $break_time_correction->id }}][break_start]" value="{{ $break_time_correction->break_start_correction_formatted }}" readonly>
                             <p>～</p>
-                            <input type="text" name="breaks[{{ $break_time->id }}][break_end]" value="{{ $break_time->break_end_correction_formatted }}" readonly>
+                            <input type="text" name="breaks[{{ $break_time_correction->id }}][break_end]" value="{{ $break_time_correction->break_end_correction_formatted }}" readonly>
                         </div>
                     </td>
                 </tr>

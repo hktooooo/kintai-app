@@ -53,8 +53,8 @@ class AdminAttendanceListTest extends TestCase
             'work_date' => '2025-11-30',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
     
@@ -63,8 +63,8 @@ class AdminAttendanceListTest extends TestCase
             'work_date' => '2025-11-30',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -73,8 +73,8 @@ class AdminAttendanceListTest extends TestCase
             'work_date' => '2025-11-30',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -90,8 +90,8 @@ class AdminAttendanceListTest extends TestCase
             'test_user1', 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // ユーザ2の勤怠確認
@@ -99,8 +99,8 @@ class AdminAttendanceListTest extends TestCase
             'test_user2', 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         // ユーザ3の勤怠確認
@@ -108,8 +108,8 @@ class AdminAttendanceListTest extends TestCase
             'test_user3', 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -163,8 +163,8 @@ class AdminAttendanceListTest extends TestCase
             'work_date' => '2025-11-29',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -191,8 +191,8 @@ class AdminAttendanceListTest extends TestCase
             'test_user1', 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -223,8 +223,8 @@ class AdminAttendanceListTest extends TestCase
             'work_date' => '2025-12-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -251,8 +251,8 @@ class AdminAttendanceListTest extends TestCase
             'test_user1', 
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 }

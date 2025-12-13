@@ -43,7 +43,7 @@
                     <td class="stamp__list__data">
                         {{ $correction->attendance->work_date_formatted }}
                     </td>
-                    <td class="stamp__list__data">
+                    <td class="stamp__list__data ellipsis">
                         {{ $correction->reason_correction }}
                     </td>
                     <td class="stamp__list__data">

@@ -3,28 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Product;
-use App\Models\Condition;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
     // 登録画面の表示
-    public function show_register()
+    public function showRegister()
     {
         return view('auth.register');
     }
 
     // 登録時の処理
-    public function store_user(RegisterRequest $request)
+    public function storeUser(RegisterRequest $request)
     {
         // ユーザー作成
         $user = User::create([

@@ -55,8 +55,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -65,8 +65,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -75,8 +75,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -179,8 +179,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -189,8 +189,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -199,8 +199,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-03',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -291,8 +291,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -375,8 +375,8 @@ class AdminStampCorrectionTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -429,8 +429,8 @@ class AdminStampCorrectionTest extends TestCase
             'id' => $attendance1->id,
             'clock_in' => '10:00:00',
             'clock_out' => '17:30:00',
-            'working_hours' => '07:00:00',  // 8時間 ⇒7時間
-            'total_break' => '00:30:00', // 1時間 ⇒30分
+            'working_seconds' => 7 * 60 * 60,   // 8時間 ⇒7時間
+            'total_break_seconds' => 0.5 * 60 * 60, // 1時間 ⇒30分
             'reason' => '修正テスト1',
         ]);
 
@@ -439,8 +439,7 @@ class AdminStampCorrectionTest extends TestCase
             'attendance_id' => $attendance1->id,
             'break_start' => '11:00:00',
             'break_end' => '11:30:00',
-            'break_hours' => '00:30:00', // 30分
-            'break_seconds' => 1800, // 30分
+            'break_seconds' => 0.5 * 60 * 60, // 30分
         ]);
     }
 }

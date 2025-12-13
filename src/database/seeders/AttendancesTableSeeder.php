@@ -27,10 +27,10 @@ class AttendancesTableSeeder extends Seeder
             Attendance::create([
                 'user_id'  => 1,
                 'work_date'     => $date->toDateString(),
-                'clock_in' => $date->copy()->setTime(9, 0),
-                'clock_out'=> $date->copy()->setTime(18, 0),
-                'working_hours' => "08:00:00",
-                'total_break' => "01:00:00",
+                'clock_in' => '09:00:00',
+                'clock_out' => '18:00:00',
+                'working_seconds' => 8 * 60 * 60,
+                'total_break_seconds' => 1 * 60 * 60,
                 'status' => 'completed'
             ]);
         }
@@ -43,10 +43,10 @@ class AttendancesTableSeeder extends Seeder
             Attendance::create([
                 'user_id'  => $i,
                 'work_date'     => $date->toDateString(),
-                'clock_in' => $date->copy()->setTime(9, 0),
-                'clock_out'=> $date->copy()->setTime(18, 0),
-                'working_hours' => "08:00:00",
-                'total_break' => "01:00:00",
+                'clock_in' => '09:00:00',
+                'clock_out' => '18:00:00',
+                'working_seconds' => 8 * 60 * 60,
+                'total_break_seconds' => 1 * 60 * 60,
                 'status' => 'completed'
             ]);
         }

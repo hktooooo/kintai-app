@@ -34,8 +34,8 @@ class AttendanceListTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
     
@@ -44,8 +44,8 @@ class AttendanceListTest extends TestCase
             'work_date' => '2025-11-02',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -62,8 +62,8 @@ class AttendanceListTest extends TestCase
             $formattedDate, // 11/01(土)
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
 
         $date = Carbon::parse('2025-11-02');
@@ -74,8 +74,8 @@ class AttendanceListTest extends TestCase
             $formattedDate, // 11/02(日)
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -127,8 +127,8 @@ class AttendanceListTest extends TestCase
             'work_date' => '2025-10-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -161,8 +161,8 @@ class AttendanceListTest extends TestCase
             $formattedDate, // 10/01
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -187,8 +187,8 @@ class AttendanceListTest extends TestCase
             'work_date' => '2025-12-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 
@@ -221,8 +221,8 @@ class AttendanceListTest extends TestCase
             $formattedDate, // 12/01
             '09:00',
             '18:00',
-            '01:00',
-            '08:00',
+            '1:00',
+            '8:00',
         ]);
     }
 
@@ -247,8 +247,8 @@ class AttendanceListTest extends TestCase
             'work_date' => '2025-11-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
-            'working_hours' => '08:00:00',
-            'total_break' => '01:00:00',
+            'working_seconds' => 8 * 60 * 60,
+            'total_break_seconds' => 1 * 60 * 60,
             'status' => 'completed',
         ]);
 

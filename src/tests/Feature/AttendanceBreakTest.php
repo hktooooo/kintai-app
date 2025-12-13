@@ -212,6 +212,6 @@ class AttendanceBreakTest extends TestCase
         $response = $this->get('/attendance/list');
 
         // 休憩時間 1分の表示を確認
-        $response->assertSee('00:01');
+        $response->assertSee('0:01');
     }
 }
