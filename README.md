@@ -138,7 +138,7 @@ password: password6
 -------------------------
 
 ## テスト管理者アカウント
-name: admin 
+name: admin  
 email: admin@test.com  
 password: 12345678
 -------------------------
