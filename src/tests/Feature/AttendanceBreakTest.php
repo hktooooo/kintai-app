@@ -175,6 +175,10 @@ class AttendanceBreakTest extends TestCase
    // 休憩時間が勤怠一覧で確認できる
     public function test_break_list()
     {
+        // 固定日時を設定（テスト用）
+        $fixedNow = Carbon::parse('2025-11-30 10:00:00', 'Asia/Tokyo');
+        Carbon::setTestNow($fixedNow);
+
         // ユーザー登録・ログイン・メール認証
         $user = User::factory()->create([
             'name' => 'test_user',
@@ -191,7 +195,8 @@ class AttendanceBreakTest extends TestCase
         $attendance = Attendance::factory()->create([
             'user_id' => $user->id,
             'work_date' => $today,
-            'clock_in' => '01:00:00',
+            'clock_in' => '09:00:00',
+            'clock_out' => null,
             'status' => 'working',
         ]);
 
@@ -200,14 +205,13 @@ class AttendanceBreakTest extends TestCase
         $this->assertAuthenticatedAs($user);
 
         // 休憩入をPostしリダイレクト先まで追従
+        Carbon::setTestNow('2025-11-30 10:00:00');
         $response = $this->followingRedirects()->post('/attendance/break_start');
 
-        // 1分停止
-        sleep(60); 
-
         // 休憩戻をPostしリダイレクト先まで追従
+        Carbon::setTestNow('2025-11-30 10:01:30');
         $response = $this->followingRedirects()->post('/attendance/break_end');
-        
+
         // 出勤リストを表示
         $response = $this->get('/attendance/list');
 
