@@ -49,4 +49,10 @@ class BreakTime extends Model
             ? $this->break_end->format('H:i')
             : null;
     }
+
+    public function getBreakHmsAttribute(): string
+    {
+        return secondsToHms($this->break_seconds);
+    }
+
 }

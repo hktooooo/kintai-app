@@ -37,8 +37,8 @@
                     <td class="attendance__list__data">{{ $attendance->user->name ?? '不明' }}</td>
                     <td class="attendance__list__data">{{ $attendance->clock_in_formatted }}</td>
                     <td class="attendance__list__data">{{ $attendance->clock_out_formatted }}</td>
-                    <td class="attendance__list__data">{{ $attendance->total_break_formatted }}</td>
-                    <td class="attendance__list__data">{{ $attendance->working_hours_formatted }}</td>
+                    <td class="attendance__list__data">{{ $attendance->total_break_hi }}</td>
+                    <td class="attendance__list__data">{{ $attendance->working_hours_hi }}</td>
                     <td class="attendance__list__data">
                         <a href="{{ route('admin.detail', ['id' => $attendance->id]) }}">
                             詳細

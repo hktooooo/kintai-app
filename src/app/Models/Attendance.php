@@ -15,8 +15,8 @@ class Attendance extends Model
         'work_date',
         'clock_in',
         'clock_out',
-        'working_hours',
-        'total_break',
+        'working_seconds',
+        'total_break_seconds',
         'status',
         'reason',
     ];
@@ -42,8 +42,8 @@ class Attendance extends Model
         'work_date' => 'datetime:Y-m-d',
         'clock_in' => 'datetime:H:i:s',
         'clock_out' => 'datetime:H:i:s',
-        'working_hours' => 'datetime',
-        'total_break' => 'datetime',
+        'working_seconds' => 'integer',
+        'total_break_seconds' => 'integer',
     ];
 
     // アクセサ（Y/m/d に整形）
@@ -75,17 +75,13 @@ class Attendance extends Model
             : null;
     }
 
-    public function getWorkingHoursFormattedAttribute()
+    public function getWorkingHoursHiAttribute(): string
     {
-        return $this->working_hours
-            ? $this->working_hours->format('H:i')
-            : null;
+        return secondsToHi($this->working_seconds);
     }
 
-    public function getTotalBreakFormattedAttribute()
+    public function getTotalBreakHiAttribute(): string
     {
-        return $this->total_break
-            ? $this->total_break->format('H:i')
-            : null;
+        return secondsToHi($this->total_break_seconds);
     }
 }
